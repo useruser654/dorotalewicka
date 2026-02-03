@@ -116,6 +116,17 @@ components.html(html_code, height=380)
 # =========================
 # SUWAKI – NA DOLE
 # =========================
+
+st.markdown("""
+<style>
+/* Pogrubienie etykiet suwaków */
+div[data-baseweb="slider"] label {
+    font-weight: 700;
+    font-size: 1.05rem;
+}
+</style>
+""", unsafe_allow_html=True)
+
 st.divider()
 st.subheader("🎛 Regulacja parametrów")
 

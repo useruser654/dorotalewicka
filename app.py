@@ -119,9 +119,7 @@ col3.metric("Natężenie I", f"{I:.3f} A")
 
 st.markdown(r"""
 ### Prawo Ohma
-\[
-I = \frac{U}{R}
-\]
+I = U / R  lub U = I x R  
 """)
 
 # =========================

@@ -7,7 +7,7 @@ st.title("⚡ Prawo Ohma – symulacja")
 st.markdown("**Interaktywna symulacja przepływu prądu w zamkniętym obwodzie DC**")
 
 # =========================
-# PARAMETRY (SESSION)
+# PARAMETRY
 # =========================
 U = st.session_state.get("U", 20.0)
 R = st.session_state.get("R", 150.0)
@@ -17,8 +17,12 @@ I = U / R if R != 0 else 0
 # =========================
 # PARAMETRY ANIMACJI
 # =========================
-speed = max(0.6, min(I * 4, 12))
-dot_count = int(max(5, min(I * 25, 25)))
+if U == 0 or I == 0:
+    dot_count = 0
+    speed = 1
+else:
+    speed = min(I * 4, 12)
+    dot_count = int(min(I * 25, 25))
 
 # =========================
 # KROPKI PRĄDU
@@ -44,7 +48,7 @@ html_code = f"""
 <style>
 svg {{
     width: 100%;
-    height: 340px;
+    height: 360px;
 }}
 
 path, line {{
@@ -61,31 +65,31 @@ path, line {{
 </head>
 
 <body>
-<svg viewBox="0 0 640 340">
+<svg viewBox="0 0 640 360">
 
     <!-- GŁÓWNY OBWÓD -->
-    <path id="circuit" d="M140 60 H540 V280 H140 Z"/>
+    <path id="circuit" d="M140 60 H540 V300 H140 Z"/>
 
     <!-- ŹRÓDŁO NAPIĘCIA -->
-    <line x1="140" y1="150" x2="140" y2="190" stroke="black"/>
-    <text x="100" y="145" class="label">Źródło U</text>
+    <line x1="140" y1="160" x2="140" y2="200" stroke="black"/>
+    <text x="95" y="155" class="label">Źródło</text>
 
-    <!-- ODBICIE DO WOLTOMIERZA (RÓWNOLEGLE) -->
-    <line x1="140" y1="110" x2="220" y2="110"/>
-    <line x1="140" y1="230" x2="220" y2="230"/>
+    <!-- ODBICIE DO WOLTOMIERZA -->
+    <line x1="140" y1="120" x2="220" y2="120"/>
+    <line x1="140" y1="240" x2="220" y2="240"/>
 
     <!-- WOLTOMIERZ -->
-    <circle cx="220" cy="170" r="18" fill="white" stroke="black"/>
-    <text x="213" y="175" class="label">V</text>
-    <text x="198" y="200" class="label">{U:.1f} V</text>
+    <circle cx="220" cy="180" r="18" fill="white" stroke="black"/>
+    <text x="213" y="185" class="label">V</text>
+    <text x="195" y="210" class="label">{U:.1f} V</text>
 
-    <!-- POŁĄCZENIE POWROTNE -->
-    <line x1="220" y1="110" x2="220" y2="152"/>
-    <line x1="220" y1="188" x2="220" y2="230"/>
+    <line x1="220" y1="120" x2="220" y2="162"/>
+    <line x1="220" y1="198" x2="220" y2="240"/>
 
     <!-- REZYSTOR -->
-    <rect x="520" y="150" width="40" height="60" fill="lightgray" stroke="black"/>
-    <text x="523" y="145" class="label">R</text>
+    <rect x="520" y="170" width="40" height="60" fill="lightgray" stroke="black"/>
+    <text x="523" y="165" class="label">R</text>
+    <text x="515" y="250" class="label">{R:.0f} Ω</text>
 
     <!-- AMPEROMIERZ -->
     <circle cx="340" cy="60" r="18" fill="white" stroke="black"/>
@@ -100,7 +104,7 @@ path, line {{
 </html>
 """
 
-components.html(html_code, height=360)
+components.html(html_code, height=380)
 
 # =========================
 # WYNIKI

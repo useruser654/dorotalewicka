@@ -94,9 +94,9 @@ path, line {{
     <line x1="220" y1="200" x2="220" y2="240"/>
 
     <!-- REZYSTOR -->
-    <rect x="520" y="165" width="45" height="75" fill="lightgray" stroke="black"/>
-    <text x="530" y="155" class="symbol">R</text>
-    <text x="512" y="260" class="label">{R:.0f} Ω</text>
+    <rect x="520" y="145" width="45" height="75" fill="lightgray" stroke="black"/>
+    <text x="530" y="135" class="symbol">R</text>
+    <text x="512" y="240" class="label">{R:.0f} Ω</text>
 
     <!-- AMPEROMIERZ -->
     <circle cx="340" cy="60" r="20" fill="white" stroke="black"/>

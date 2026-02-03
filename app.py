@@ -39,7 +39,7 @@ for i in range(dot_count):
     """
 
 # =========================
-# SVG – OBWÓD (POWIĘKSZONY WEWNĘTRZNIE)
+# SVG – OBWÓD (jeszcze +~3%)
 # =========================
 html_code = f"""
 <!DOCTYPE html>
@@ -71,17 +71,15 @@ path, line {{
 </head>
 
 <body>
-<svg viewBox="40 20 560 300">
+<svg viewBox="48 26 544 291">
 
     <!-- GŁÓWNY OBWÓD -->
     <path id="circuit" d="M140 60 H540 V300 H140 Z"/>
 
-    <!-- ŹRÓDŁO NAPIĘCIA (DC) -->
+    <!-- ŹRÓDŁO NAPIĘCIA -->
     <line x1="140" y1="160" x2="140" y2="200" stroke="black"/>
-
     <line x1="120" y1="165" x2="160" y2="165" stroke="black" stroke-width="4.5"/>
     <line x1="130" y1="195" x2="150" y2="195" stroke="black" stroke-width="4.5"/>
-
     <text x="90" y="155" class="label">Źródło</text>
 
     <!-- ODBICIE DO WOLTOMIERZA -->
@@ -92,7 +90,6 @@ path, line {{
     <circle cx="220" cy="180" r="20" fill="white" stroke="black"/>
     <text x="212" y="186" class="symbol">V</text>
     <text x="190" y="214" class="label">{U:.1f} V</text>
-
     <line x1="220" y1="120" x2="220" y2="160"/>
     <line x1="220" y1="200" x2="220" y2="240"/>
 
@@ -114,7 +111,6 @@ path, line {{
 </html>
 """
 
-# ⬇️ BOX BEZ ZMIAN
 components.html(html_code, height=380)
 
 # =========================

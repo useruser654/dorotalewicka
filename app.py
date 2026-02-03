@@ -119,8 +119,8 @@ components.html(html_code, height=380)
 
 st.markdown("""
 <style>
-/* Pogrubienie etykiet suwaków */
-div[data-baseweb="slider"] label {
+/* Pogrubienie tekstu opisującego suwaki */
+div[data-testid="stSlider"] > label {
     font-weight: 700;
     font-size: 1.05rem;
 }

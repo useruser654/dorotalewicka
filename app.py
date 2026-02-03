@@ -21,8 +21,8 @@ if U == 0 or I == 0:
     dot_count = 0
     speed = 1
 else:
-    speed = min(I * 4, 14)
-    dot_count = int(min(I * 30, 36))
+    speed = min(I * 4, 12)
+    dot_count = int(min(I * 25, 25))
 
 # =========================
 # KROPKI PRĄDU
@@ -31,7 +31,7 @@ dots_html = ""
 for i in range(dot_count):
     delay = i * (1 / dot_count)
     dots_html += f"""
-    <circle r="6" fill="yellow">
+    <circle r="4.5" fill="yellow">
         <animateMotion dur="{10/speed:.2f}s" begin="{delay:.2f}s" repeatCount="indefinite">
             <mpath href="#circuit"/>
         </animateMotion>
@@ -39,7 +39,7 @@ for i in range(dot_count):
     """
 
 # =========================
-# SVG – OBWÓD (POWIĘKSZONY)
+# SVG – OBWÓD
 # =========================
 html_code = f"""
 <!DOCTYPE html>
@@ -48,66 +48,65 @@ html_code = f"""
 <style>
 svg {{
     width: 100%;
-    height: auto;
-    display: block;
-    margin: auto;
+    height: 360px;
 }}
 
 path, line {{
     stroke: green;
-    stroke-width: 5;
+    stroke-width: 4;
     fill: none;
 }}
 
 .label {{
-    font-size: 15px;
+    font-size: 12px;
     font-family: Arial;
 }}
 
 .symbol {{
-    font-size: 18px;
-    font-weight: bold;
+    font-size: 13px;
     font-family: Arial;
+    font-weight: bold;
 }}
 </style>
 </head>
 
 <body>
-<svg viewBox="0 0 760 420">
+<svg viewBox="0 0 640 360">
 
     <!-- GŁÓWNY OBWÓD -->
-    <path id="circuit" d="M160 70 H600 V350 H160 Z"/>
+    <path id="circuit" d="M140 60 H540 V300 H140 Z"/>
 
-    <!-- ŹRÓDŁO NAPIĘCIA -->
-    <line x1="160" y1="210" x2="160" y2="260"/>
+    <!-- ŹRÓDŁO NAPIĘCIA (SYMBOL DC) -->
+    <!-- przewód -->
+    <line x1="140" y1="160" x2="140" y2="200" stroke="black"/>
 
-    <line x1="138" y1="215" x2="182" y2="215" stroke="black" stroke-width="5"/>
-    <line x1="146" y1="255" x2="174" y2="255" stroke="black" stroke-width="5"/>
+    <!-- kreski źródła -->
+    <line x1="122" y1="165" x2="158" y2="165" stroke="black" stroke-width="4"/>
+    <line x1="130" y1="195" x2="150" y2="195" stroke="black" stroke-width="4"/>
 
-    <text x="105" y="205" class="label">Źródło</text>
-    <text x="102" y="285" class="label">{U:.1f} V</text>
+    <text x="95" y="155" class="label">Źródło</text>
 
     <!-- ODBICIE DO WOLTOMIERZA -->
-    <line x1="160" y1="140" x2="300" y2="140"/>
-    <line x1="160" y1="360" x2="300" y2="360"/>
+    <line x1="140" y1="120" x2="220" y2="120"/>
+    <line x1="140" y1="240" x2="220" y2="240"/>
 
     <!-- WOLTOMIERZ -->
-    <circle cx="300" cy="250" r="26" fill="white" stroke="black"/>
-    <text x="292" y="256" class="symbol">V</text>
-    <text x="268" y="300" class="label">{U:.1f} V</text>
+    <circle cx="220" cy="180" r="18" fill="white" stroke="black"/>
+    <text x="213" y="185" class="symbol">V</text>
+    <text x="195" y="210" class="label">{U:.1f} V</text>
 
-    <line x1="300" y1="140" x2="300" y2="224"/>
-    <line x1="300" y1="276" x2="300" y2="360"/>
+    <line x1="220" y1="120" x2="220" y2="162"/>
+    <line x1="220" y1="198" x2="220" y2="240"/>
 
     <!-- REZYSTOR -->
-    <rect x="600" y="220" width="56" height="110" fill="lightgray" stroke="black"/>
-    <text x="620" y="210" class="symbol">R</text>
-    <text x="598" y="360" class="label">{R:.0f} Ω</text>
+    <rect x="520" y="170" width="40" height="60" fill="lightgray" stroke="black"/>
+    <text x="523" y="165" class="symbol">R</text>
+    <text x="515" y="250" class="label">{R:.0f} Ω</text>
 
     <!-- AMPEROMIERZ -->
-    <circle cx="420" cy="70" r="26" fill="white" stroke="black"/>
-    <text x="412" y="76" class="symbol">A</text>
-    <text x="370" y="118" class="label">{I:.3f} A</text>
+    <circle cx="340" cy="60" r="18" fill="white" stroke="black"/>
+    <text x="332" y="65" class="symbol">A</text>
+    <text x="305" y="90" class="label">{I:.3f} A</text>
 
     <!-- KROPKI PRĄDU -->
     {dots_html}
@@ -117,8 +116,7 @@ path, line {{
 </html>
 """
 
-# 👇 MNIEJSZY BOX, WIĘKSZA ANIMACJA
-components.html(html_code, height=420)
+components.html(html_code, height=380)
 
 # =========================
 # WYNIKI

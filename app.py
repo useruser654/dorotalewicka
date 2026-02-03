@@ -114,6 +114,15 @@ path, line {{
 components.html(html_code, height=380)
 
 # =========================
+# SUWAKI – NA DOLE
+# =========================
+st.divider()
+st.subheader("🎛 Regulacja parametrów")
+
+U = st.slider("Napięcie U [V]", 0.0, 300.0, U, step=1.0, key="U")
+R = st.slider("Opór R [Ω]", 1.0, 500.0, R, step=1.0, key="R")
+
+# =========================
 # WYNIKI
 # =========================
 st.divider()
@@ -130,14 +139,5 @@ st.markdown(r"""
 I = \frac{U}{R}
 \]
 """)
-
-# =========================
-# SUWAKI – NA DOLE
-# =========================
-st.divider()
-st.subheader("🎛 Regulacja parametrów")
-
-U = st.slider("Napięcie U [V]", 0.0, 300.0, U, step=1.0, key="U")
-R = st.slider("Opór R [Ω]", 1.0, 500.0, R, step=1.0, key="R")
 
 

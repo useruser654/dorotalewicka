@@ -71,7 +71,7 @@ path, line {{
 </head>
 
 <body>
-<svg viewBox="18 2 544 291">
+<svg viewBox="50 28 540 295">
 
     <!-- GŁÓWNY OBWÓD -->
     <path id="circuit" d="M140 60 H540 V300 H140 Z"/>

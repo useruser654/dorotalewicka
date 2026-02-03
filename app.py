@@ -39,7 +39,7 @@ for i in range(dot_count):
     """
 
 # =========================
-# SVG – OBWÓD
+# SVG – OBWÓD (POWIĘKSZONY)
 # =========================
 html_code = f"""
 <!DOCTYPE html>
@@ -47,25 +47,25 @@ html_code = f"""
 <head>
 <style>
 svg {{
-    width: 95%;
-    height: 480px;
+    width: 100%;
+    height: auto;
     display: block;
     margin: auto;
 }}
 
 path, line {{
     stroke: green;
-    stroke-width: 4;
+    stroke-width: 5;
     fill: none;
 }}
 
 .label {{
-    font-size: 14px;
+    font-size: 15px;
     font-family: Arial;
 }}
 
 .symbol {{
-    font-size: 16px;
+    font-size: 18px;
     font-weight: bold;
     font-family: Arial;
 }}
@@ -73,42 +73,41 @@ path, line {{
 </head>
 
 <body>
-<svg viewBox="0 0 760 480">
+<svg viewBox="0 0 760 420">
 
     <!-- GŁÓWNY OBWÓD -->
-    <path id="circuit" d="M180 80 H660 V380 H180 Z"/>
+    <path id="circuit" d="M160 70 H600 V350 H160 Z"/>
 
     <!-- ŹRÓDŁO NAPIĘCIA -->
-    <line x1="180" y1="220" x2="180" y2="260"/>
+    <line x1="160" y1="210" x2="160" y2="260"/>
 
-    <!-- kreski źródła -->
-    <line x1="160" y1="225" x2="200" y2="225" stroke="black" stroke-width="4"/>
-    <line x1="168" y1="255" x2="192" y2="255" stroke="black" stroke-width="4"/>
+    <line x1="138" y1="215" x2="182" y2="215" stroke="black" stroke-width="5"/>
+    <line x1="146" y1="255" x2="174" y2="255" stroke="black" stroke-width="5"/>
 
-    <text x="120" y="215" class="label">Źródło</text>
-    <text x="118" y="285" class="label">{U:.1f} V</text>
+    <text x="105" y="205" class="label">Źródło</text>
+    <text x="102" y="285" class="label">{U:.1f} V</text>
 
     <!-- ODBICIE DO WOLTOMIERZA -->
-    <line x1="180" y1="150" x2="300" y2="150"/>
-    <line x1="180" y1="350" x2="300" y2="350"/>
+    <line x1="160" y1="140" x2="300" y2="140"/>
+    <line x1="160" y1="360" x2="300" y2="360"/>
 
     <!-- WOLTOMIERZ -->
-    <circle cx="300" cy="250" r="24" fill="white" stroke="black"/>
+    <circle cx="300" cy="250" r="26" fill="white" stroke="black"/>
     <text x="292" y="256" class="symbol">V</text>
-    <text x="272" y="292" class="label">{U:.1f} V</text>
+    <text x="268" y="300" class="label">{U:.1f} V</text>
 
-    <line x1="300" y1="150" x2="300" y2="226"/>
-    <line x1="300" y1="274" x2="300" y2="350"/>
+    <line x1="300" y1="140" x2="300" y2="224"/>
+    <line x1="300" y1="276" x2="300" y2="360"/>
 
     <!-- REZYSTOR -->
-    <rect x="640" y="230" width="48" height="100" fill="lightgray" stroke="black"/>
-    <text x="652" y="220" class="symbol">R</text>
-    <text x="630" y="350" class="label">{R:.0f} Ω</text>
+    <rect x="600" y="220" width="56" height="110" fill="lightgray" stroke="black"/>
+    <text x="620" y="210" class="symbol">R</text>
+    <text x="598" y="360" class="label">{R:.0f} Ω</text>
 
     <!-- AMPEROMIERZ -->
-    <circle cx="420" cy="80" r="24" fill="white" stroke="black"/>
-    <text x="412" y="86" class="symbol">A</text>
-    <text x="372" y="122" class="label">{I:.3f} A</text>
+    <circle cx="420" cy="70" r="26" fill="white" stroke="black"/>
+    <text x="412" y="76" class="symbol">A</text>
+    <text x="370" y="118" class="label">{I:.3f} A</text>
 
     <!-- KROPKI PRĄDU -->
     {dots_html}
@@ -118,7 +117,8 @@ path, line {{
 </html>
 """
 
-components.html(html_code, height=500)
+# 👇 MNIEJSZY BOX, WIĘKSZA ANIMACJA
+components.html(html_code, height=420)
 
 # =========================
 # WYNIKI
@@ -132,8 +132,10 @@ col2.metric("Opór R", f"{R:.0f} Ω")
 col3.metric("Natężenie I", f"{I:.3f} A")
 
 st.markdown(r"""
-### Ω Prawo Ohma
-Natężenie prądu (I) płynącego przez przewodnik jest wprost proporcjonalne do napięcia przyłożonego do jego końców oraz odwrotnie proporcjonalne do jego oporu.  Wzór: I = U / R  lub  U = I x R
+### Prawo Ohma
+\[
+I = \frac{U}{R}
+\]
 """)
 
 # =========================

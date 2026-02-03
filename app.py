@@ -119,7 +119,7 @@ col3.metric("Natężenie I", f"{I:.3f} A")
 
 st.markdown(r"""
 ### Prawo Ohma
-I = U / R  lub U = I x R  
+Natężenie prądu (I) płynącego przez przewodnik jest wprost proporcjonalne do napięcia przyłożonego do jego końców oraz odwrotnie proporcjonalne do jego oporu.  Wzór: I = U / R  lub  U = I x R  
 """)
 
 # =========================

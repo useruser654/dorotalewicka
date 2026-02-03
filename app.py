@@ -7,7 +7,7 @@ st.title("⚡ Prawo Ohma – symulacja")
 st.markdown("**Interaktywna symulacja przepływu prądu w zamkniętym obwodzie DC**")
 
 # =========================
-# DOMYŚLNE WARTOŚCI
+# PARAMETRY (SESSION)
 # =========================
 U = st.session_state.get("U", 20.0)
 R = st.session_state.get("R", 150.0)
@@ -17,23 +17,26 @@ I = U / R if R != 0 else 0
 # =========================
 # PARAMETRY ANIMACJI
 # =========================
-speed = max(0.6, min(I * 5, 10))
-dot_count = int(max(4, min(I * 30, 20)))
+speed = max(0.6, min(I * 4, 12))
+dot_count = int(max(5, min(I * 25, 25)))
 
 # =========================
-# ANIMACJA – OBWÓD
+# KROPKI PRĄDU
 # =========================
 dots_html = ""
 for i in range(dot_count):
     delay = i * (1 / dot_count)
     dots_html += f"""
-    <circle r="5" class="dot">
+    <circle r="4.5" fill="yellow">
         <animateMotion dur="{10/speed:.2f}s" begin="{delay:.2f}s" repeatCount="indefinite">
             <mpath href="#circuit"/>
         </animateMotion>
     </circle>
     """
 
+# =========================
+# SVG – OBWÓD
+# =========================
 html_code = f"""
 <!DOCTYPE html>
 <html>
@@ -41,17 +44,13 @@ html_code = f"""
 <style>
 svg {{
     width: 100%;
-    height: 320px;
+    height: 340px;
 }}
 
-path {{
+path, line {{
     stroke: green;
     stroke-width: 4;
     fill: none;
-}}
-
-.dot {{
-    fill: yellow;
 }}
 
 .label {{
@@ -62,30 +61,38 @@ path {{
 </head>
 
 <body>
-<svg viewBox="0 0 600 320">
+<svg viewBox="0 0 640 340">
 
-    <!-- Obwód -->
-    <path id="circuit" d="M120 60 H500 V260 H120 Z"/>
+    <!-- GŁÓWNY OBWÓD -->
+    <path id="circuit" d="M140 60 H540 V280 H140 Z"/>
 
-    <!-- Źródło napięcia -->
-    <line x1="120" y1="140" x2="120" y2="180" stroke="black" stroke-width="4"/>
-    <text x="95" y="135" class="label">Źródło U</text>
+    <!-- ŹRÓDŁO NAPIĘCIA -->
+    <line x1="140" y1="150" x2="140" y2="190" stroke="black"/>
+    <text x="100" y="145" class="label">Źródło U</text>
 
-    <!-- Woltomierz -->
-    <circle cx="170" cy="160" r="18" fill="white" stroke="black"/>
-    <text x="162" y="165" class="label">V</text>
-    <text x="150" y="190" class="label">{U:.1f} V</text>
+    <!-- ODBICIE DO WOLTOMIERZA (RÓWNOLEGLE) -->
+    <line x1="140" y1="110" x2="220" y2="110"/>
+    <line x1="140" y1="230" x2="220" y2="230"/>
 
-    <!-- Rezystor -->
-    <rect x="480" y="130" width="40" height="60" fill="lightgray" stroke="black"/>
-    <text x="483" y="125" class="label">R</text>
+    <!-- WOLTOMIERZ -->
+    <circle cx="220" cy="170" r="18" fill="white" stroke="black"/>
+    <text x="213" y="175" class="label">V</text>
+    <text x="198" y="200" class="label">{U:.1f} V</text>
 
-    <!-- Amperomierz -->
-    <circle cx="310" cy="60" r="18" fill="white" stroke="black"/>
-    <text x="302" y="65" class="label">A</text>
-    <text x="280" y="90" class="label">{I:.3f} A</text>
+    <!-- POŁĄCZENIE POWROTNE -->
+    <line x1="220" y1="110" x2="220" y2="152"/>
+    <line x1="220" y1="188" x2="220" y2="230"/>
 
-    <!-- Kropki prądu -->
+    <!-- REZYSTOR -->
+    <rect x="520" y="150" width="40" height="60" fill="lightgray" stroke="black"/>
+    <text x="523" y="145" class="label">R</text>
+
+    <!-- AMPEROMIERZ -->
+    <circle cx="340" cy="60" r="18" fill="white" stroke="black"/>
+    <text x="332" y="65" class="label">A</text>
+    <text x="305" y="90" class="label">{I:.3f} A</text>
+
+    <!-- KROPKI PRĄDU -->
     {dots_html}
 
 </svg>
@@ -93,7 +100,7 @@ path {{
 </html>
 """
 
-components.html(html_code, height=340)
+components.html(html_code, height=360)
 
 # =========================
 # WYNIKI
@@ -119,5 +126,6 @@ I = \frac{U}{R}
 st.divider()
 st.subheader("🎛 Regulacja parametrów")
 
-U = st.slider("Napięcie U [V]", 0.0, 50.0, U, step=0.5, key="U")
+U = st.slider("Napięcie U [V]", 0.0, 300.0, U, step=1.0, key="U")
 R = st.slider("Opór R [Ω]", 1.0, 500.0, R, step=1.0, key="R")
+

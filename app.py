@@ -21,8 +21,8 @@ if U == 0 or I == 0:
     dot_count = 0
     speed = 1
 else:
-    speed = min(I * 4, 12)
-    dot_count = int(min(I * 25, 30))
+    speed = min(I * 4, 14)
+    dot_count = int(min(I * 30, 36))
 
 # =========================
 # KROPKI PRĄDU
@@ -31,7 +31,7 @@ dots_html = ""
 for i in range(dot_count):
     delay = i * (1 / dot_count)
     dots_html += f"""
-    <circle r="5" fill="yellow">
+    <circle r="6" fill="yellow">
         <animateMotion dur="{10/speed:.2f}s" begin="{delay:.2f}s" repeatCount="indefinite">
             <mpath href="#circuit"/>
         </animateMotion>
@@ -47,8 +47,10 @@ html_code = f"""
 <head>
 <style>
 svg {{
-    width: 100%;
-    height: 420px;
+    width: 95%;
+    height: 480px;
+    display: block;
+    margin: auto;
 }}
 
 path, line {{
@@ -58,50 +60,55 @@ path, line {{
 }}
 
 .label {{
-    font-size: 13px;
+    font-size: 14px;
+    font-family: Arial;
+}}
+
+.symbol {{
+    font-size: 16px;
+    font-weight: bold;
     font-family: Arial;
 }}
 </style>
 </head>
 
 <body>
-<svg viewBox="0 0 700 420">
+<svg viewBox="0 0 760 480">
 
     <!-- GŁÓWNY OBWÓD -->
-    <path id="circuit" d="M160 70 H600 V340 H160 Z"/>
+    <path id="circuit" d="M180 80 H660 V380 H180 Z"/>
 
-    <!-- ŹRÓDŁO NAPIĘCIA (SYMBOL DC) -->
-    <!-- przewody -->
-    <line x1="160" y1="180" x2="160" y2="220"/>
+    <!-- ŹRÓDŁO NAPIĘCIA -->
+    <line x1="180" y1="220" x2="180" y2="260"/>
 
     <!-- kreski źródła -->
-    <line x1="145" y1="185" x2="175" y2="185" stroke="black" stroke-width="4"/>
-    <line x1="150" y1="215" x2="170" y2="215" stroke="black" stroke-width="4"/>
+    <line x1="160" y1="225" x2="200" y2="225" stroke="black" stroke-width="4"/>
+    <line x1="168" y1="255" x2="192" y2="255" stroke="black" stroke-width="4"/>
 
-    <text x="110" y="175" class="label">Źródło</text>
-    <text x="108" y="240" class="label">{U:.1f} V</text>
+    <text x="120" y="215" class="label">Źródło</text>
+    <text x="118" y="285" class="label">{U:.1f} V</text>
 
     <!-- ODBICIE DO WOLTOMIERZA -->
-    <line x1="160" y1="130" x2="260" y2="130"/>
-    <line x1="160" y1="290" x2="260" y2="290"/>
+    <line x1="180" y1="150" x2="300" y2="150"/>
+    <line x1="180" y1="350" x2="300" y2="350"/>
 
-    <!-- WOLTOMIERZ (RÓWNOLEGLE) -->
-    <circle cx="260" cy="210" r="20" fill="white" stroke="black"/>
-    <text x="252" y="215" class="label">V</text>
-    <text x="235" y="245" class="label">{U:.1f} V</text>
+    <!-- WOLTOMIERZ -->
+    <circle cx="300" cy="250" r="24" fill="white" stroke="black"/>
+    <text x="292" y="256" class="symbol">V</text>
+    <text x="272" y="292" class="label">{U:.1f} V</text>
 
-    <line x1="260" y1="130" x2="260" y2="190"/>
-    <line x1="260" y1="230" x2="260" y2="290"/>
+    <line x1="300" y1="150" x2="300" y2="226"/>
+    <line x1="300" y1="274" x2="300" y2="350"/>
 
     <!-- REZYSTOR -->
-    <rect x="580" y="190" width="40" height="80" fill="lightgray" stroke="black"/>
-    <text x="582" y="180" class="label">R</text>
-    <text x="570" y="290" class="label">{R:.0f} Ω</text>
+    <rect x="640" y="230" width="48" height="100" fill="lightgray" stroke="black"/>
+    <text x="652" y="220" class="symbol">R</text>
+    <text x="630" y="350" class="label">{R:.0f} Ω</text>
 
     <!-- AMPEROMIERZ -->
-    <circle cx="380" cy="70" r="20" fill="white" stroke="black"/>
-    <text x="372" y="75" class="label">A</text>
-    <text x="340" y="110" class="label">{I:.3f} A</text>
+    <circle cx="420" cy="80" r="24" fill="white" stroke="black"/>
+    <text x="412" y="86" class="symbol">A</text>
+    <text x="372" y="122" class="label">{I:.3f} A</text>
 
     <!-- KROPKI PRĄDU -->
     {dots_html}
@@ -111,7 +118,7 @@ path, line {{
 </html>
 """
 
-components.html(html_code, height=440)
+components.html(html_code, height=500)
 
 # =========================
 # WYNIKI
@@ -125,10 +132,8 @@ col2.metric("Opór R", f"{R:.0f} Ω")
 col3.metric("Natężenie I", f"{I:.3f} A")
 
 st.markdown(r"""
-### Prawo Ohma
-\[
-I = \frac{U}{R}
-\]
+### Ω Prawo Ohma
+Natężenie prądu (I) płynącego przez przewodnik jest wprost proporcjonalne do napięcia przyłożonego do jego końców oraz odwrotnie proporcjonalne do jego oporu.  Wzór: I = U / R  lub  U = I x R
 """)
 
 # =========================
@@ -139,5 +144,6 @@ st.subheader("🎛 Regulacja parametrów")
 
 U = st.slider("Napięcie U [V]", 0.0, 300.0, U, step=1.0, key="U")
 R = st.slider("Opór R [Ω]", 1.0, 500.0, R, step=1.0, key="R")
+
 
 

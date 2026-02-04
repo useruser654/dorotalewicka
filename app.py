@@ -154,25 +154,41 @@ components.html(html_code, height=360)
 # =========================
 st.markdown("<h3 style='text-align:center; margin-top:6px;'>🎛️ Panel sterowania 🎛️</h3>", unsafe_allow_html=True)
 
+# --- FUNKCJE AKTUALIZUJĄCE ---
+def update_U():
+    try:
+        val = float(st.session_state.U_text.replace(",", "."))
+        val = round(val, 2)
+        if 0 <= val <= 600:
+            st.session_state.U = val
+    except:
+        pass
+
+def update_R():
+    try:
+        val = float(st.session_state.R_text.replace(",", "."))
+        val = round(val, 2)
+        if 1 <= val <= 500:
+            st.session_state.R = val
+    except:
+        pass
+
 # === NAPIĘCIE U ===
 st.markdown("**⚡ Napięcie U [V]**")
 
-U = st.number_input(
-    "Wartość napięcia [V]",
-    min_value=0.0,
-    max_value=600.0,
-    value=float(U),
-    step=0.01,
-    format="%.2f",
-    key="U_input",
-    label_visibility="collapsed"
+st.text_input(
+    "",
+    value=f"{st.session_state.U:.2f}",
+    key="U_text",
+    placeholder="wprowadź wartość do dwóch miejsc po przecinku i zatwierdź enterem",
+    on_change=update_U
 )
 
 U = st.slider(
     "",
     0.0,
     600.0,
-    float(U),
+    st.session_state.U,
     step=0.01,
     key="U"
 )
@@ -182,22 +198,19 @@ st.markdown("<div style='height:14px'></div>", unsafe_allow_html=True)
 # === OPÓR R ===
 st.markdown("**Opór R [Ω]**")
 
-R = st.number_input(
-    "Wartość oporu [Ω]",
-    min_value=1.0,
-    max_value=500.0,
-    value=float(R),
-    step=0.01,
-    format="%.2f",
-    key="R_input",
-    label_visibility="collapsed"
+st.text_input(
+    "",
+    value=f"{st.session_state.R:.2f}",
+    key="R_text",
+    placeholder="wprowadź wartość do dwóch miejsc po przecinku i zatwierdź enterem",
+    on_change=update_R
 )
 
 R = st.slider(
     "",
     1.0,
     500.0,
-    float(R),
+    st.session_state.R,
     step=0.01,
     key="R"
 )

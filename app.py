@@ -154,7 +154,7 @@ U = st.slider("", 0.0, 300.0, U, step=1.0, key="U")
 st.markdown("<div style='height:18px'></div>", unsafe_allow_html=True)
 
 # --- OPÓR ---
-st.markdown("** Opór R [Ω]**")
+st.markdown("Opór R [Ω]")
 st.markdown(
     f"<div style='color:red; font-weight:700; font-size:1.2rem; margin-top:-6px;'>"
     f"{R:.0f} Ω</div>",

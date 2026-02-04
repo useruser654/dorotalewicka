@@ -8,14 +8,14 @@ st.set_page_config(page_title="Prawo Ohma – symulacja", layout="centered")
 # =========================
 st.markdown("""
 <style>
-/* podniesienie całej zawartości strony */
-section.main > div {
-    padding-top: 1.2rem;
+/* realne podniesienie CAŁOŚCI strony */
+.block-container {
+    padding-top: 0.5rem !important;
 }
 
-/* lekkie podniesienie sekcji z wynikami */
-h3 {
-    margin-top: -10px;
+/* podniesienie sekcji wyników */
+.section-results {
+    margin-top: -18px;
 }
 
 /* ukrycie domyślnej wartości suwaka */
@@ -29,11 +29,11 @@ span[data-testid="stSliderValue"] {
 # TYTUŁY – WYŚRODKOWANE
 # =========================
 st.markdown(
-    "<h1 style='text-align:center'>⚡ Prawo Ohma ⚡</h1>",
+    "<h1 style='text-align:center; margin-bottom:6px;'>⚡ Prawo Ohma ⚡</h1>",
     unsafe_allow_html=True
 )
 st.markdown(
-    "<p style='text-align:center; font-weight:600'>"
+    "<p style='text-align:center; font-weight:600; margin-top:0;'>"
     "Interaktywna symulacja przepływu prądu stałego w zamkniętym obwodzie DC"
     "</p>",
     unsafe_allow_html=True
@@ -44,7 +44,6 @@ st.markdown(
 # =========================
 U = st.session_state.get("U", 20.0)
 R = st.session_state.get("R", 150.0)
-
 I = U / R if R != 0 else 0
 
 # =========================
@@ -119,7 +118,6 @@ path, line {{
     <circle cx="220" cy="180" r="20" fill="white" stroke="black"/>
     <text x="212" y="186" class="symbol">V</text>
     <text x="190" y="214" class="label">{U:.1f} V</text>
-
     <line x1="220" y1="120" x2="220" y2="160"/>
     <line x1="220" y1="200" x2="220" y2="240"/>
 
@@ -138,39 +136,37 @@ path, line {{
 </html>
 """
 
-components.html(html_code, height=380)
+components.html(html_code, height=360)
 
 # =========================
 # PANEL STEROWANIA
 # =========================
-st.markdown("<h3 style='text-align:center'>🎛️ Panel sterowania 🎛️</h3>", unsafe_allow_html=True)
+st.markdown("<h3 style='text-align:center; margin-top:8px;'>🎛️ Panel sterowania 🎛️</h3>", unsafe_allow_html=True)
 
-# --- NAPIĘCIE ---
 st.markdown("**⚡ Napięcie U [V]**")
 st.markdown(
-    f"<div style='color:red; font-weight:700; font-size:1.2rem; margin-top:-6px;'>"
+    f"<div style='color:red; font-weight:700; font-size:1.15rem; margin-top:-6px;'>"
     f"{U:.1f} V</div>",
     unsafe_allow_html=True
 )
 U = st.slider("", 0.0, 300.0, U, step=1.0, key="U")
 
-st.markdown("<div style='height:18px'></div>", unsafe_allow_html=True)
+st.markdown("<div style='height:16px'></div>", unsafe_allow_html=True)
 
-# --- OPÓR ---
 st.markdown("**Opór R [Ω]**")
 st.markdown(
-    f"<div style='color:red; font-weight:700; font-size:1.2rem; margin-top:-6px;'>"
+    f"<div style='color:red; font-weight:700; font-size:1.15rem; margin-top:-6px;'>"
     f"{R:.0f} Ω</div>",
     unsafe_allow_html=True
 )
 R = st.slider("", 1.0, 500.0, R, step=1.0, key="R")
 
 # =========================
-# WYNIKI
+# WYNIKI + PRAWO OHMA
 # =========================
-st.divider()
-st.subheader("📊 Wartości w obwodzie")
+st.markdown('<div class="section-results">', unsafe_allow_html=True)
 
+st.subheader("📊 Wartości w obwodzie")
 col1, col2, col3 = st.columns(3)
 col1.metric("Natężenie I", f"{I:.3f} A")
 col2.metric("Napięcie U", f"{U:.1f} V")
@@ -178,10 +174,13 @@ col3.metric("Opór R", f"{R:.0f} Ω")
 
 st.markdown("""
 ### Prawo Ohma
-Natężenie prądu (I) płynącego przez przewodnik jest wprost proporcjonalne do napięcia (U) przyłożonego 
-do jego końców oraz odwrotnie proporcjonalne do jego oporu (R).
+Natężenie prądu (I) jest wprost proporcjonalne do napięcia (U)
+oraz odwrotnie proporcjonalne do oporu (R).
 
 **Wzory:**  
 I = U / R  
 U = I · R
 """)
+
+st.markdown("</div>", unsafe_allow_html=True)
+

@@ -209,8 +209,10 @@ U = st.slider(
 
 st.markdown("<div style='height:14px'></div>", unsafe_allow_html=True)
 
-# === OPÓR R ===
-st.markdown("**Opór R [Ω]**")
+st.markdown(
+    "<div style='margin-bottom:-12px; font-weight:700;'>Opór R [Ω]</div>",
+    unsafe_allow_html=True
+)
 
 st.text_input(
     "",

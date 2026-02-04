@@ -14,6 +14,10 @@ st.markdown("""
 span[data-testid="stSliderValue"] {
     display: none;
 }
+.bold-metric {
+    font-weight: 700;
+    font-size: 1rem; /* taka sama jak metryki Streamlit */
+}
 </style>
 """, unsafe_allow_html=True)
 
@@ -25,34 +29,14 @@ st.markdown("<p style='text-align:center; font-weight:600; margin-top:0;'>Intera
 st.markdown("<p style='text-align:center; font-size:0.95rem; margin-top:-6px;'><b>A</b> – amperomierz &nbsp;&nbsp;|&nbsp;&nbsp; <b>V</b> – woltomierz &nbsp;&nbsp;|&nbsp;&nbsp; <b>R</b> – rezystor</p>", unsafe_allow_html=True)
 
 # =========================
-# PANEL STEROWANIA
+# PARAMETRY DOMYŚLNE
 # =========================
-st.markdown("<h3 style='text-align:center; margin-top:6px;'>🎛️ Panel sterowania 🎛️</h3>", unsafe_allow_html=True)
-
-# Zapis poprzednich wartości do session_state
-if "prev_U" not in st.session_state:
-    st.session_state.prev_U = 20.0
-if "prev_R" not in st.session_state:
-    st.session_state.prev_R = 150.0
-
 U = st.session_state.get("U", 20.0)
 R = st.session_state.get("R", 150.0)
-
-st.markdown("**⚡ Napięcie U [V]**")
-U = st.slider("", 0.0, 300.0, U, step=1.0, key="U")
-
-st.markdown("<div style='height:16px'></div>", unsafe_allow_html=True)
-
-st.markdown("**Opór R [Ω]**")
-R = st.slider("", 1.0, 500.0, R, step=1.0, key="R")
-
-# =========================
-# OBLICZENIA
-# =========================
 I = U / R if R != 0 else 0
 
 # =========================
-# PARAMETRY ANIMACJI DOTÓW
+# PARAMETRY ANIMACJI KROPEK
 # =========================
 if U == 0 or I == 0:
     dot_count = 0
@@ -73,15 +57,22 @@ for i in range(dot_count):
     """
 
 # =========================
-# SPRAWDZENIE CZY ZMIANA -> PULSOWANIE
+# SPRAWDZENIE, CZY ZMIANA -> PULSOWANIE AMPEROMIERZA
 # =========================
+if "prev_U" not in st.session_state:
+    st.session_state.prev_U = U
+if "prev_R" not in st.session_state:
+    st.session_state.prev_R = R
+
 pulse_js = ""
 if U != st.session_state.prev_U or R != st.session_state.prev_R:
     pulse_js = """
     const amp = document.getElementById("ampermeter");
     amp.animate([
         { r: "20" },
-        { r: "25" },
+        { r: "23" },
+        { r: "20" },
+        { r: "23" },
         { r: "20" }
     ], {
         duration: 2000,
@@ -161,15 +152,31 @@ path, line {{
 </html>
 """
 
+# =========================
+# ANIMACJA
+# =========================
 components.html(html_code, height=360)
 
 # =========================
-# WYNIKI – pogrubienie, ta sama wielkość czcionki
+# PANEL STEROWANIA POD ANIMACJĄ
 # =========================
-st.subheader("📊 Wartości w obwodzie 📊")
+st.markdown("<h3 style='text-align:center; margin-top:6px;'>🎛️ Panel sterowania 🎛️</h3>", unsafe_allow_html=True)
+
+st.markdown("**⚡ Napięcie U [V]**")
+st.markdown(f"<div style='color:red; font-weight:700; margin-top:-6px;'>{U:.1f} V</div>", unsafe_allow_html=True)
+
+st.markdown("<div style='height:16px'></div>", unsafe_allow_html=True)
+
+st.markdown("**Opór R [Ω]**")
+st.markdown(f"<div style='color:red; font-weight:700; margin-top:-6px;'>{R:.0f} Ω</div>", unsafe_allow_html=True)
+
+# =========================
+# WYNIKI – pogrubione, taka sama wielkość czcionki
+# =========================
+st.subheader("📊 Wartości w obwodzie")
 
 col1, col2, col3 = st.columns(3)
-col1.markdown(f"<div style='font-weight:700;'>{'Natężenie I'}<br>{I:.3f} A</div>", unsafe_allow_html=True)
+col1.markdown(f"<div style='font-weight:700; font-size:16px;'>Natężenie I<br>{I:.3f} A</div>", unsafe_allow_html=True)
 col2.metric("Napięcie U", f"{U:.1f} V")
 col3.metric("Opór R", f"{R:.0f} Ω")
 

@@ -73,6 +73,7 @@ path, line {{
 <body>
 <svg viewBox="48 26 544 291">
 
+    <!-- OBWÓD -->
     <path id="circuit" d="M140 60 H540 V300 H140 Z"/>
 
     <!-- ŹRÓDŁO -->
@@ -98,6 +99,7 @@ path, line {{
     <text x="332" y="66" class="symbol">A</text>
     <text x="300" y="96" class="label">{I:.3f} A</text>
 
+    <!-- PRĄD -->
     {dots_html}
 
 </svg>
@@ -108,20 +110,12 @@ path, line {{
 components.html(html_code, height=380)
 
 # =========================
-# CSS – odstępy + wartości suwaków
+# CSS – ukrycie domyślnej wartości suwaka
 # =========================
 st.markdown("""
 <style>
-/* Mniejszy odstęp między etykietą a suwakiem */
-.slider-label {
-    margin-bottom: -8px;
-}
-
-/* Styl wartości suwaka */
 span[data-testid="stSliderValue"] {
-    color: red;
-    font-weight: 700;
-    font-size: 1.1rem;
+    display: none;
 }
 </style>
 """, unsafe_allow_html=True)
@@ -131,10 +125,25 @@ span[data-testid="stSliderValue"] {
 # =========================
 st.subheader("🎛 Panel sterowania")
 
-st.markdown('<div class="slider-label"><b>⚡ Napięcie U [V]</b></div>', unsafe_allow_html=True)
+# --- NAPIĘCIE ---
+st.markdown("**⚡ Napięcie U [V]**")
+st.markdown(
+    f"<div style='color:red; font-weight:700; font-size:1.2rem; margin-top:-6px;'>"
+    f"{U:.1f} V</div>",
+    unsafe_allow_html=True
+)
 U = st.slider("", 0.0, 300.0, U, step=1.0, key="U")
 
-st.markdown('<div class="slider-label"><b>Ω Opór R [Ω]</b></div>', unsafe_allow_html=True)
+# odstęp między suwakami
+st.markdown("<div style='height:18px'></div>", unsafe_allow_html=True)
+
+# --- OPÓR ---
+st.markdown("**Ω Opór R [Ω]**")
+st.markdown(
+    f"<div style='color:red; font-weight:700; font-size:1.2rem; margin-top:-6px;'>"
+    f"{R:.0f} Ω</div>",
+    unsafe_allow_html=True
+)
 R = st.slider("", 1.0, 500.0, R, step=1.0, key="R")
 
 # =========================

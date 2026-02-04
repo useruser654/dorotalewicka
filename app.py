@@ -180,11 +180,12 @@ col3.metric("Opór R", f"{R:.0f} Ω")
 # WZORY PRAWA OHMA
 # =========================
 st.markdown("""
-### Prawo Ohma
+<h3>Prawo Ohma</h3>
+<p style="white-space: nowrap;">
 Natężenie prądu (I) jest wprost proporcjonalne do napięcia (U) oraz odwrotnie proporcjonalne do oporu (R).
-**Wzory:**  
-I = U / R  
+</p>
+<p><b>Wzory:</b><br>
+I = U / R<br>
 U = I · R
-""")
-
-
+</p>
+""", unsafe_allow_html=True)

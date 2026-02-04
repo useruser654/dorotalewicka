@@ -169,14 +169,15 @@ st.divider()
 st.subheader("📊 Wartości w obwodzie")
 
 col1, col2, col3 = st.columns(3)
-col3.metric("Natężenie I", f"{I:.3f} A")
-col1.metric("Napięcie U", f"{U:.1f} V")
-col2.metric("Opór R", f"{R:.0f} Ω")
+col1.metric("Natężenie I", f"{I:.3f} A")
+col2.metric("Napięcie U", f"{U:.1f} V")
+col3.metric("Opór R", f"{R:.0f} Ω")
 
 st.markdown("""
 ### Prawo Ohma
-Natężenie prądu (I) płynącego przez przewodnik jest wprost proporcjonalne do napięcia przyłożonego do jego 
-końców oraz odwrotnie proporcjonalne do jego oporu.
+Natężenie prądu (I) płynącego przez przewodnik jest wprost proporcjonalne do napięcia (U) przyłożonego 
+do jego końców oraz odwrotnie proporcjonalne do jego oporu (R).
+
 **Wzory:**  
 I = U / R  
 U = I · R

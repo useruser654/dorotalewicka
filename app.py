@@ -192,7 +192,7 @@ st.text_input(
 st.markdown("</div>", unsafe_allow_html=True)
 
 st.markdown(
-    "<div style='text-align:right; font-size:0.8rem; color:#999; margin-top:-6px;'>"
+    "<div style='text-align:right; font-size:0.8rem; color:#999; margin-top:-14px;'>"
     "wprowadź wartość do dwóch miejsc po przecinku i zatwierdź enterem"
     "</div>",
     unsafe_allow_html=True

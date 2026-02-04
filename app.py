@@ -7,12 +7,12 @@ st.set_page_config(page_title="Prawo Ohma – symulacja", layout="centered")
 # TYTUŁY – WYŚRODKOWANE
 # =========================
 st.markdown(
-    "<h1 style='text-align:center'>⚡ Prawo Ohma – symulacja</h1>",
+    "<h1 style='text-align:center'>⚡ Prawo Ohma ⚡</h1>",
     unsafe_allow_html=True
 )
 st.markdown(
     "<p style='text-align:center; font-weight:600'>"
-    "Interaktywna symulacja przepływu prądu w zamkniętym obwodzie DC"
+    "Interaktywna symulacja przepływu prądu stałego w zamkniętym obwodzie DC"
     "</p>",
     unsafe_allow_html=True
 )
@@ -140,7 +140,7 @@ span[data-testid="stSliderValue"] {
 # =========================
 # PANEL STEROWANIA – WYŚRODKOWANY
 # =========================
-st.markdown("<h3 style='text-align:center'>🎛 Panel sterowania</h3>", unsafe_allow_html=True)
+st.markdown("<h3 style='text-align:center'>🎛️ Panel sterowania 🎛️</h3>", unsafe_allow_html=True)
 
 # --- NAPIĘCIE ---
 st.markdown("**⚡ Napięcie U [V]**")
@@ -154,7 +154,7 @@ U = st.slider("", 0.0, 300.0, U, step=1.0, key="U")
 st.markdown("<div style='height:18px'></div>", unsafe_allow_html=True)
 
 # --- OPÓR ---
-st.markdown("**Ω Opór R [Ω]**")
+st.markdown("** Opór R [Ω]**")
 st.markdown(
     f"<div style='color:red; font-weight:700; font-size:1.2rem; margin-top:-6px;'>"
     f"{R:.0f} Ω</div>",
@@ -169,16 +169,14 @@ st.divider()
 st.subheader("📊 Wartości w obwodzie")
 
 col1, col2, col3 = st.columns(3)
+col3.metric("Natężenie I", f"{I:.3f} A")
 col1.metric("Napięcie U", f"{U:.1f} V")
 col2.metric("Opór R", f"{R:.0f} Ω")
-col3.metric("Natężenie I", f"{I:.3f} A")
 
 st.markdown("""
 ### Prawo Ohma
-Natężenie prądu (I) płynącego przez przewodnik jest wprost proporcjonalne  
-do napięcia przyłożonego do jego końców oraz odwrotnie proporcjonalne  
-do jego oporu.
-
+Natężenie prądu (I) płynącego przez przewodnik jest wprost proporcjonalne do napięcia przyłożonego do jego 
+końców oraz odwrotnie proporcjonalne do jego oporu.
 **Wzory:**  
 I = U / R  
 U = I · R

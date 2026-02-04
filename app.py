@@ -87,8 +87,6 @@ path, line {{
     <circle cx="220" cy="180" r="20" fill="white" stroke="black"/>
     <text x="212" y="186" class="symbol">V</text>
     <text x="190" y="214" class="label">{U:.1f} V</text>
-    <line x1="220" y1="120" x2="220" y2="160"/>
-    <line x1="220" y1="200" x2="220" y2="240"/>
 
     <!-- REZYSTOR -->
     <rect x="520" y="145" width="45" height="75" fill="lightgray" stroke="black"/>
@@ -110,24 +108,33 @@ path, line {{
 components.html(html_code, height=380)
 
 # =========================
-# PANEL STEROWANIA (bliżej animacji)
+# CSS – odstępy + wartości suwaków
 # =========================
-
 st.markdown("""
 <style>
-/* Podniesienie panelu sterowania */
-section[data-testid="stVerticalBlock"] {
-    margin-top: -20px;
+/* Mniejszy odstęp między etykietą a suwakiem */
+.slider-label {
+    margin-bottom: -8px;
+}
+
+/* Styl wartości suwaka */
+span[data-testid="stSliderValue"] {
+    color: red;
+    font-weight: 700;
+    font-size: 1.1rem;
 }
 </style>
 """, unsafe_allow_html=True)
 
+# =========================
+# PANEL STEROWANIA
+# =========================
 st.subheader("🎛 Panel sterowania")
 
-st.markdown("**⚡ Napięcie U [V]**")
+st.markdown('<div class="slider-label"><b>⚡ Napięcie U [V]</b></div>', unsafe_allow_html=True)
 U = st.slider("", 0.0, 300.0, U, step=1.0, key="U")
 
-st.markdown("**Ω Opór R [Ω]**")
+st.markdown('<div class="slider-label"><b>Ω Opór R [Ω]</b></div>', unsafe_allow_html=True)
 R = st.slider("", 1.0, 500.0, R, step=1.0, key="R")
 
 # =========================
@@ -151,7 +158,6 @@ do jego oporu.
 I = U / R  
 U = I · R
 """)
-
 
 
 

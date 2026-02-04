@@ -8,21 +8,14 @@ st.set_page_config(page_title="Prawo Ohma – symulacja", layout="centered")
 # =========================
 st.markdown("""
 <style>
-/* lekkie OBNIŻENIE całej strony (żeby nie ucinało nagłówka) */
 .block-container {
     padding-top: 1.4rem !important;
 }
-
-/* ukrycie domyślnej wartości suwaka */
 span[data-testid="stSliderValue"] {
     display: none;
 }
-
-/* pogrubienie pierwszego metrica (Natężenie I) */
-div[data-testid="metric-container"]:first-child label {
-    font-weight: 700;
-}
-div[data-testid="metric-container"]:first-child div {
+/* pogrubienie metric Natężenie I */
+.bold-metric label, .bold-metric div {
     font-weight: 700;
     font-size: 1.1rem;
 }
@@ -32,26 +25,9 @@ div[data-testid="metric-container"]:first-child div {
 # =========================
 # TYTUŁY – WYŚRODKOWANE
 # =========================
-st.markdown(
-    "<h1 style='text-align:center; margin-bottom:4px;'>⚡ Prawo Ohma ⚡</h1>",
-    unsafe_allow_html=True
-)
-st.markdown(
-    "<p style='text-align:center; font-weight:600; margin-top:0;'>"
-    "Interaktywna symulacja przepływu prądu stałego w zamkniętym obwodzie DC"
-    "</p>",
-    unsafe_allow_html=True
-)
-
-# ===== LEGENDA =====
-st.markdown(
-    "<p style='text-align:center; font-size:0.95rem; margin-top:-6px;'>"
-    "<b>A</b> – amperomierz &nbsp;&nbsp;|&nbsp;&nbsp; "
-    "<b>V</b> – woltomierz &nbsp;&nbsp;|&nbsp;&nbsp; "
-    "<b>R</b> – rezystor"
-    "</p>",
-    unsafe_allow_html=True
-)
+st.markdown("<h1 style='text-align:center; margin-bottom:4px;'>⚡ Prawo Ohma ⚡</h1>", unsafe_allow_html=True)
+st.markdown("<p style='text-align:center; font-weight:600; margin-top:0;'>Interaktywna symulacja przepływu prądu stałego w zamkniętym obwodzie DC</p>", unsafe_allow_html=True)
+st.markdown("<p style='text-align:center; font-size:0.95rem; margin-top:-6px;'><b>A</b> – amperomierz &nbsp;&nbsp;|&nbsp;&nbsp; <b>V</b> – woltomierz &nbsp;&nbsp;|&nbsp;&nbsp; <b>R</b> – rezystor</p>", unsafe_allow_html=True)
 
 # =========================
 # PARAMETRY
@@ -96,18 +72,15 @@ svg {{
     width: 100%;
     height: 360px;
 }}
-
 path, line {{
     stroke: green;
     stroke-width: 4.5;
     fill: none;
 }}
-
 .label {{
     font-size: 14px;
     font-family: Arial;
 }}
-
 .symbol {{
     font-size: 15px;
     font-family: Arial;
@@ -129,6 +102,12 @@ path, line {{
     <line x1="140" y1="120" x2="220" y2="120"/>
     <line x1="140" y1="240" x2="220" y2="240"/>
 
+    <circle cx="220" cy="180" r="20" fill="white" stroke="black">
+        <animate attributeName="r" values="20;25;20" dur="0.5s" repeatCount="1" begin="indefinite" id="pulseA"/>
+    </circle>
+    <text x="332" y="66" class="symbol">A</text>
+    <text x="300" y="96" class="label">{I:.3f} A</text>
+
     <circle cx="220" cy="180" r="20" fill="white" stroke="black"/>
     <text x="212" y="186" class="symbol">V</text>
     <text x="190" y="214" class="label">{U:.1f} V</text>
@@ -136,16 +115,17 @@ path, line {{
     <line x1="220" y1="200" x2="220" y2="240"/>
 
     <rect x="520" y="145" width="45" height="75" fill="lightgray" stroke="black"/>
-    <text x="530" y="135" class="symbol">R</text>
+    <text x="540" y="185" class="symbol">R</text>
     <text x="512" y="240" class="label">{R:.0f} Ω</text>
-
-    <circle cx="340" cy="60" r="20" fill="white" stroke="black"/>
-    <text x="332" y="66" class="symbol">A</text>
-    <text x="300" y="96" class="label">{I:.3f} A</text>
 
     {dots_html}
 
 </svg>
+<script>
+    // animacja pulsowania amperomierza po zmianie U lub R
+    const pulse = () => document.getElementById("pulseA").beginElement();
+    window.addEventListener("load", pulse);
+</script>
 </body>
 </html>
 """
@@ -158,21 +138,13 @@ components.html(html_code, height=360)
 st.markdown("<h3 style='text-align:center; margin-top:6px;'>🎛️ Panel sterowania 🎛️</h3>", unsafe_allow_html=True)
 
 st.markdown("**⚡ Napięcie U [V]**")
-st.markdown(
-    f"<div style='color:red; font-weight:700; font-size:1.15rem; margin-top:-6px;'>"
-    f"{U:.1f} V</div>",
-    unsafe_allow_html=True
-)
+st.markdown(f"<div style='color:red; font-weight:700; font-size:1.15rem; margin-top:-6px;'>{U:.1f} V</div>", unsafe_allow_html=True)
 U = st.slider("", 0.0, 300.0, U, step=1.0, key="U")
 
 st.markdown("<div style='height:16px'></div>", unsafe_allow_html=True)
 
 st.markdown("**Opór R [Ω]**")
-st.markdown(
-    f"<div style='color:red; font-weight:700; font-size:1.15rem; margin-top:-6px;'>"
-    f"{R:.0f} Ω</div>",
-    unsafe_allow_html=True
-)
+st.markdown(f"<div style='color:red; font-weight:700; font-size:1.15rem; margin-top:-6px;'>{R:.0f} Ω</div>", unsafe_allow_html=True)
 R = st.slider("", 1.0, 500.0, R, step=1.0, key="R")
 
 # =========================
@@ -181,7 +153,7 @@ R = st.slider("", 1.0, 500.0, R, step=1.0, key="R")
 st.subheader("📊 Wartości w obwodzie")
 
 col1, col2, col3 = st.columns(3)
-col1.metric("Natężenie I", f"{I:.3f} A")
+col1.markdown(f"<div class='bold-metric'>Natężenie I<br>{I:.3f} A</div>", unsafe_allow_html=True)
 col2.metric("Napięcie U", f"{U:.1f} V")
 col3.metric("Opór R", f"{R:.0f} Ω")
 

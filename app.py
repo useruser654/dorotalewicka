@@ -163,13 +163,13 @@ st.markdown("<div style='height:16px'></div>", unsafe_allow_html=True)
 
 # Opór R - suwaki podniesione bliżej wartości
 st.markdown("**Opór R [Ω]**")
-st.markdown(f"<div style='color:red; font-weight:700; margin-top:-6px; margin-bottom:-16px;'>{R:.0f} Ω</div>", unsafe_allow_html=True)
+st.markdown(f"<div style='color:red; font-weight:700; margin-top:-6px; margin-bottom:-19px;'>{R:.0f} Ω</div>", unsafe_allow_html=True)
 R = st.slider("", 1.0, 500.0, R, step=1.0, key="R")
 
 # =========================
 # WYNIKI – wyśrodkowany nagłówek i pogrubiony tylko napis "Natężenie I"
 # =========================
-st.markdown("<h3 style='text-align:center; margin-top:10px;'>📊 Wartości w obwodzie</h3>", unsafe_allow_html=True)
+st.markdown("<h3 style='text-align:center; margin-top:10px;'>📊 Wartości w obwodzie 📊</h3>", unsafe_allow_html=True)
 
 col1, col2, col3 = st.columns(3)
 col1.metric("**Natężenie I**", f"{I:.3f} A")  # tylko napis pogrubiony

@@ -15,9 +15,9 @@ span[data-testid="stSliderValue"] {
     display: none;
 }
 /* pogrubienie metric Natężenie I */
-.bold-metric label, .bold-metric div {
+.bold-metric {
     font-weight: 700;
-    font-size: 1.1rem;
+    font-size: 1.2rem;
 }
 </style>
 """, unsafe_allow_html=True)
@@ -102,28 +102,38 @@ path, line {{
     <line x1="140" y1="120" x2="220" y2="120"/>
     <line x1="140" y1="240" x2="220" y2="240"/>
 
-    <circle cx="220" cy="180" r="20" fill="white" stroke="black">
-        <animate attributeName="r" values="20;25;20" dur="0.5s" repeatCount="1" begin="indefinite" id="pulseA"/>
-    </circle>
-    <text x="332" y="66" class="symbol">A</text>
-    <text x="300" y="96" class="label">{I:.3f} A</text>
-
+    <!-- WOLTOMIERZ (bez animacji) -->
     <circle cx="220" cy="180" r="20" fill="white" stroke="black"/>
     <text x="212" y="186" class="symbol">V</text>
     <text x="190" y="214" class="label">{U:.1f} V</text>
     <line x1="220" y1="120" x2="220" y2="160"/>
     <line x1="220" y1="200" x2="220" y2="240"/>
 
+    <!-- REZYSTOR -->
     <rect x="520" y="145" width="45" height="75" fill="lightgray" stroke="black"/>
     <text x="540" y="185" class="symbol">R</text>
     <text x="512" y="240" class="label">{R:.0f} Ω</text>
+
+    <!-- AMPEROMIERZ z animacją pulsowania -->
+    <circle id="ampermeter" cx="340" cy="60" r="20" fill="white" stroke="black"/>
+    <text x="332" y="66" class="symbol">A</text>
+    <text x="300" y="96" class="label">{I:.3f} A</text>
 
     {dots_html}
 
 </svg>
 <script>
-    // animacja pulsowania amperomierza po zmianie U lub R
-    const pulse = () => document.getElementById("pulseA").beginElement();
+    const pulse = () => {{
+        const amp = document.getElementById("ampermeter");
+        amp.animate([
+            {{ r: "20" }},
+            {{ r: "25" }},
+            {{ r: "20" }}
+        ], {{
+            duration: 300,
+            iterations: 1
+        }});
+    }};
     window.addEventListener("load", pulse);
 </script>
 </body>
@@ -166,4 +176,3 @@ oraz odwrotnie proporcjonalne do oporu (R).
 I = U / R  
 U = I · R
 """)
-

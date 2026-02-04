@@ -163,7 +163,7 @@ st.markdown("<div style='height:16px'></div>", unsafe_allow_html=True)
 
 # Opór R - suwaki podniesione bliżej wartości
 st.markdown("**Opór R [Ω]**")
-st.markdown(f"<div style='color:red; font-weight:700; margin-top:-22px;'>{U:.1f} V</div>", unsafe_allow_html=True)
+st.markdown(f"<div style='color:red; font-weight:700; margin-top:-20px; margin-bottom:20px;'>{R:.0f} Ω</div>", unsafe_allow_html=True)
 R = st.slider("", 1.0, 500.0, R, step=1.0, key="R")
 
 # =========================

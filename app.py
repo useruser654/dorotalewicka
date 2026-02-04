@@ -62,24 +62,23 @@ if U != st.session_state.prev_U or R != st.session_state.prev_R:
     pulse_js = """
     const amp = document.getElementById("ampermeter");
     const fill = document.getElementById("amp-fill");
-    // pulsowanie kółka
+    // pulsowanie kółka i wypełnienia - łagodnie, kilka cykli w 2s
     amp.animate([
         { r: "20" },
-        { r: "23" },
+        { r: "22" },
         { r: "20" },
-        { r: "23" },
+        { r: "22" },
         { r: "20" }
     ], {
         duration: 2000,
         iterations: 1,
         easing: "ease-in-out"
     });
-    // tętno wypełnienia
     fill.animate([
         { opacity: 0 },
-        { opacity: 0.4 },
+        { opacity: 0.35 },
         { opacity: 0 },
-        { opacity: 0.4 },
+        { opacity: 0.35 },
         { opacity: 0 }
     ], {
         duration: 2000,
@@ -171,10 +170,10 @@ R = st.slider("", 1.0, 500.0, R, step=1.0, key="R")
 # =========================
 # WYNIKI – Natężenie I jak metryki Streamlit
 # =========================
-st.subheader("📊 Wartości w obwodzie")
+st.markdown("<h3 style='text-align:center; margin-top:10px;'>📊 Wartości w obwodzie</h3>", unsafe_allow_html=True)
 
 col1, col2, col3 = st.columns(3)
-col1.metric("Natężenie I", f"{I:.3f} A")  # ta sama czcionka co Napięcie U i Opór R
+col1.metric("Natężenie I", f"{I:.3f} A")  # taka sama czcionka co Napięcie U i Opór R
 col2.metric("Napięcie U", f"{U:.1f} V")
 col3.metric("Opór R", f"{R:.0f} Ω")
 

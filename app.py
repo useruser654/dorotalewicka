@@ -157,21 +157,24 @@ st.markdown("<h3 style='text-align:center; margin-top:6px;'>🎛️ Panel sterow
 # --- FUNKCJE AKTUALIZUJĄCE ---
 def update_U():
     try:
-        val = float(st.session_state.U_text.replace(",", "."))
-        val = round(val, 2)
+        val = st.session_state.U_text.replace(",", ".")
+        val = round(float(val), 2)
         if 0 <= val <= 600:
             st.session_state.U = val
+            st.session_state.U_text = f"{val:.2f}"
     except:
         pass
 
 def update_R():
     try:
-        val = float(st.session_state.R_text.replace(",", "."))
-        val = round(val, 2)
+        val = st.session_state.R_text.replace(",", ".")
+        val = round(float(val), 2)
         if 1 <= val <= 500:
             st.session_state.R = val
+            st.session_state.R_text = f"{val:.2f}"
     except:
         pass
+
 
 # === NAPIĘCIE U ===
 st.markdown("**⚡ Napięcie U [V]**")
@@ -180,8 +183,14 @@ st.text_input(
     "",
     value=f"{st.session_state.U:.2f}",
     key="U_text",
-    placeholder="wprowadź wartość do dwóch miejsc po przecinku i zatwierdź enterem",
     on_change=update_U
+)
+
+st.markdown(
+    "<div style='text-align:right; font-size:0.8rem; color:#999; margin-top:-6px;'>"
+    "wprowadź wartość do dwóch miejsc po przecinku i zatwierdź enterem"
+    "</div>",
+    unsafe_allow_html=True
 )
 
 U = st.slider(
@@ -202,8 +211,14 @@ st.text_input(
     "",
     value=f"{st.session_state.R:.2f}",
     key="R_text",
-    placeholder="wprowadź wartość do dwóch miejsc po przecinku i zatwierdź enterem",
     on_change=update_R
+)
+
+st.markdown(
+    "<div style='text-align:right; font-size:0.8rem; color:#999; margin-top:-6px;'>"
+    "wprowadź wartość do dwóch miejsc po przecinku i zatwierdź enterem"
+    "</div>",
+    unsafe_allow_html=True
 )
 
 R = st.slider(

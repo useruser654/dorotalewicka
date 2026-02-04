@@ -10,19 +10,42 @@ st.markdown("""
 <style>
 .block-container { padding-top: 1.4rem !important; }
 span[data-testid="stSliderValue"] { display: none; }
-.bold-metric { font-weight: 700; }
+
+/* 🔧 usunięcie nadmiarowej przerwy pod text_input */
+div[data-testid="stTextInput"] {
+    margin-bottom: -10px;
+}
+
+/* 🔧 podniesienie suwaków bliżej placeholdera */
+div[data-testid="stSlider"] {
+    margin-top: -6px;
+}
 </style>
 """, unsafe_allow_html=True)
 
 # =========================
 # TYTUŁY I LEGENDA
 # =========================
-st.markdown("<h1 style='text-align:center; margin-bottom:4px;'>⚡ Prawo Ohma ⚡</h1>", unsafe_allow_html=True)
-st.markdown("<p style='text-align:center; font-weight:600; margin-top:0;'>Interaktywna symulacja przepływu prądu stałego w zamkniętym obwodzie DC</p>", unsafe_allow_html=True)
-st.markdown("<p style='text-align:center; font-size:0.95rem; margin-top:-6px;'><b>A</b> – amperomierz &nbsp;&nbsp;|&nbsp;&nbsp; <b>V</b> – woltomierz &nbsp;&nbsp;|&nbsp;&nbsp; <b>R</b> – rezystor</p>", unsafe_allow_html=True)
+st.markdown(
+    "<h1 style='text-align:center; margin-bottom:4px;'>⚡ Prawo Ohma ⚡</h1>",
+    unsafe_allow_html=True
+)
+st.markdown(
+    "<p style='text-align:center; font-weight:600; margin-top:0;'>"
+    "Interaktywna symulacja przepływu prądu stałego w zamkniętym obwodzie DC"
+    "</p>",
+    unsafe_allow_html=True
+)
+st.markdown(
+    "<p style='text-align:center; font-size:0.95rem; margin-top:-6px;'>"
+    "<b>A</b> – amperomierz &nbsp;|&nbsp; "
+    "<b>V</b> – woltomierz &nbsp;|&nbsp; "
+    "<b>R</b> – rezystor</p>",
+    unsafe_allow_html=True
+)
 
 # =========================
-# DOMYŚLNE WARTOŚCI / SESSION_STATE
+# SESSION STATE
 # =========================
 if "U" not in st.session_state: st.session_state.U = 20.0
 if "R" not in st.session_state: st.session_state.R = 150.0
@@ -34,11 +57,10 @@ R = st.session_state.R
 I = U / R if R != 0 else 0
 
 # =========================
-# PARAMETRY DOTÓW PRĄDU
+# KROPKI PRĄDU
 # =========================
 if U == 0 or I == 0:
-    dot_count = 0
-    speed = 1
+    dot_count, speed = 0, 1
 else:
     speed = min(I * 4, 12)
     dot_count = int(min(I * 25, 25))
@@ -55,207 +77,113 @@ for i in range(dot_count):
     """
 
 # =========================
-# PULSOWANIE AMPEROMIERZA I "TĘTNO PRĄDU"
+# PULS AMPEROMIERZA
 # =========================
 pulse_js = ""
 if U != st.session_state.prev_U or R != st.session_state.prev_R:
     pulse_js = """
     const amp = document.getElementById("ampermeter");
     const fill = document.getElementById("amp-fill");
-    amp.animate([
-        { r: "20" },
-        { r: "22" },
-        { r: "20" },
-        { r: "22" },
-        { r: "20" }
-    ], {
-        duration: 2000,
-        iterations: 1,
-        easing: "ease-in-out"
-    });
-    fill.animate([
-        { opacity: 0 },
-        { opacity: 0.35 },
-        { opacity: 0 },
-        { opacity: 0.35 },
-        { opacity: 0 }
-    ], {
-        duration: 2000,
-        iterations: 1,
-        easing: "ease-in-out"
-    });
+    amp.animate([{r:"20"},{r:"22"},{r:"20"}], {duration:1200});
+    fill.animate([{opacity:0},{opacity:0.35},{opacity:0}], {duration:1200});
     """
 st.session_state.prev_U = U
 st.session_state.prev_R = R
 
 # =========================
-# SVG – OBWÓD Z AMPEROMIERZEM I TĘTNEM
+# SVG – OBWÓD
 # =========================
 html_code = f"""
-<!DOCTYPE html>
-<html>
-<head>
-<style>
-svg {{ width: 100%; height: 360px; }}
-path, line {{ stroke: green; stroke-width: 4.5; fill: none; }}
-.label {{ font-size: 14px; font-family: Arial; }}
-.symbol {{ font-size: 15px; font-family: Arial; font-weight: bold; }}
-</style>
-</head>
+<svg viewBox="48 26 544 291" style="width:100%; height:360px">
+<path id="circuit" d="M140 60 H540 V300 H140 Z"
+      stroke="green" stroke-width="4.5" fill="none"/>
 
-<body>
-<svg viewBox="48 26 544 291">
+<line x1="140" y1="160" x2="140" y2="200" stroke="black" stroke-width="4.5"/>
+<line x1="120" y1="165" x2="160" y2="165" stroke="black" stroke-width="4.5"/>
+<line x1="130" y1="195" x2="150" y2="195" stroke="black" stroke-width="4.5"/>
 
-    <path id="circuit" d="M140 60 H540 V300 H140 Z"/>
+<line x1="140" y1="120" x2="220" y2="120" stroke="green" stroke-width="4.5"/>
+<line x1="140" y1="240" x2="220" y2="240" stroke="green" stroke-width="4.5"/>
 
-    <line x1="140" y1="160" x2="140" y2="200" stroke="black"/>
-    <line x1="120" y1="165" x2="160" y2="165" stroke="black" stroke-width="4.5"/>
-    <line x1="130" y1="195" x2="150" y2="195" stroke="black" stroke-width="4.5"/>
-    <text x="90" y="155" class="label">Źródło</text>
+<circle cx="220" cy="180" r="20" fill="white" stroke="black"/>
+<text x="212" y="186" font-weight="bold">V</text>
+<text x="190" y="214">{U:.1f} V</text>
+<line x1="220" y1="120" x2="220" y2="160" stroke="green" stroke-width="4.5"/>
+<line x1="220" y1="200" x2="220" y2="240" stroke="green" stroke-width="4.5"/>
 
-    <line x1="140" y1="120" x2="220" y2="120"/>
-    <line x1="140" y1="240" x2="220" y2="240"/>
+<rect x="520" y="145" width="45" height="75" fill="#ddd" stroke="black"/>
+<text x="540" y="185" font-weight="bold">R</text>
+<text x="512" y="240">{R:.0f} Ω</text>
 
-    <!-- Woltomierz -->
-    <circle cx="220" cy="180" r="20" fill="white" stroke="black"/>
-    <text x="212" y="186" class="symbol">V</text>
-    <text x="190" y="214" class="label">{U:.1f} V</text>
-    <line x1="220" y1="120" x2="220" y2="160"/>
-    <line x1="220" y1="200" x2="220" y2="240"/>
+<circle id="ampermeter" cx="340" cy="60" r="20" fill="white" stroke="black"/>
+<circle id="amp-fill" cx="340" cy="60" r="15" fill="red" opacity="0"/>
+<text x="332" y="66" font-weight="bold">A</text>
+<text x="300" y="96">{I:.3f} A</text>
 
-    <!-- Rezystor -->
-    <rect x="520" y="145" width="45" height="75" fill="lightgray" stroke="black"/>
-    <text x="540" y="185" class="symbol">R</text>
-    <text x="512" y="240" class="label">{R:.0f} Ω</text>
+{dots_html}
 
-    <!-- Amperomierz -->
-    <circle id="ampermeter" cx="340" cy="60" r="20" fill="white" stroke="black"/>
-    <circle id="amp-fill" cx="340" cy="60" r="15" fill="red" opacity="0"/>
-    <text x="332" y="66" class="symbol">A</text>
-    <text x="300" y="96" class="label">{I:.3f} A</text>
-
-    {dots_html}
-
+<script>{pulse_js}</script>
 </svg>
-<script>
-{pulse_js}
-</script>
-</body>
-</html>
 """
 
-# =========================
-# ANIMACJA
-# =========================
 components.html(html_code, height=360)
 
 # =========================
-# PANEL STEROWANIA POD ANIMACJĄ
+# PANEL STEROWANIA
 # =========================
 st.markdown("<h3 style='text-align:center; margin-top:6px;'>🎛️ Panel sterowania 🎛️</h3>", unsafe_allow_html=True)
 
-# --- FUNKCJE AKTUALIZUJĄCE ---
 def update_U():
     try:
-        val = st.session_state.U_text.replace(",", ".")
-        val = round(float(val), 2)
-        if 0 <= val <= 600:
-            st.session_state.U = val
-            st.session_state.U_text = f"{val:.2f}"
+        v = round(float(st.session_state.U_text.replace(",", ".")), 2)
+        if 0 <= v <= 600:
+            st.session_state.U = v
+            st.session_state.U_text = f"{v:.2f}"
     except:
         pass
 
 def update_R():
     try:
-        val = st.session_state.R_text.replace(",", ".")
-        val = round(float(val), 2)
-        if 1 <= val <= 500:
-            st.session_state.R = val
-            st.session_state.R_text = f"{val:.2f}"
+        v = round(float(st.session_state.R_text.replace(",", ".")), 2)
+        if 1 <= v <= 500:
+            st.session_state.R = v
+            st.session_state.R_text = f"{v:.2f}"
     except:
         pass
 
-
-# === NAPIĘCIE U ===
+# --- NAPIĘCIE ---
+st.markdown("<div style='font-weight:700'>⚡ Napięcie U [V]</div>", unsafe_allow_html=True)
+st.text_input("", f"{U:.2f}", key="U_text", on_change=update_U)
 st.markdown(
-    "<div style='margin-bottom:-12px; font-weight:700;'>⚡ Napięcie U [V]</div>",
+    "<div style='text-align:right; font-size:0.8rem; color:#999;'>"
+    "wprowadź wartość do dwóch miejsc po przecinku i zatwierdź enterem</div>",
     unsafe_allow_html=True
 )
+U = st.slider("", 0.0, 600.0, st.session_state.U, step=0.01, key="U")
 
-st.text_input(
-    "",
-    value=f"{st.session_state.U:.2f}",
-    key="U_text",
-    on_change=update_U
-)
+st.markdown("<div style='height:10px'></div>", unsafe_allow_html=True)
 
-st.markdown("</div>", unsafe_allow_html=True)
-
+# --- OPÓR ---
+st.markdown("<div style='font-weight:700'>Opór R [Ω]</div>", unsafe_allow_html=True)
+st.text_input("", f"{R:.2f}", key="R_text", on_change=update_R)
 st.markdown(
-    "<div style='text-align:right; font-size:0.8rem; color:#999; margin-top:-14px;'>"
-    "wprowadź wartość do dwóch miejsc po przecinku i zatwierdź enterem"
-    "</div>",
+    "<div style='text-align:right; font-size:0.8rem; color:#999;'>"
+    "wprowadź wartość do dwóch miejsc po przecinku i zatwierdź enterem</div>",
     unsafe_allow_html=True
 )
-
-U = st.slider(
-    "",
-    0.0,
-    600.0,
-    st.session_state.U,
-    step=0.01,
-    key="U"
-)
-
-st.markdown("<div style='height:14px'></div>", unsafe_allow_html=True)
-
-st.markdown(
-    "<div style='margin-bottom:-12px; font-weight:700;'>Opór R [Ω]</div>",
-    unsafe_allow_html=True
-)
-
-st.text_input(
-    "",
-    value=f"{st.session_state.R:.2f}",
-    key="R_text",
-    on_change=update_R
-)
-
-st.markdown(
-    "<div style='text-align:right; font-size:0.8rem; color:#999; margin-top:-6px;'>"
-    "wprowadź wartość do dwóch miejsc po przecinku i zatwierdź enterem"
-    "</div>",
-    unsafe_allow_html=True
-)
-
-R = st.slider(
-    "",
-    1.0,
-    500.0,
-    st.session_state.R,
-    step=0.01,
-    key="R"
-)
+R = st.slider("", 1.0, 500.0, st.session_state.R, step=0.01, key="R")
 
 # =========================
-# WYNIKI – wyśrodkowany nagłówek i pogrubiony tylko napis "Natężenie I"
+# WARTOŚCI
 # =========================
-st.markdown("<h3 style='text-align:center; margin-top:10px;'>📊 Wartości w obwodzie 📊</h3>", unsafe_allow_html=True)
+st.markdown("<h3 style='text-align:center;'>📊 Wartości w obwodzie 📊</h3>", unsafe_allow_html=True)
+c1, c2, c3 = st.columns(3)
+c1.metric("**Natężenie I**", f"{I:.3f} A")
+c2.metric("Napięcie U", f"{U:.1f} V")
+c3.metric("Opór R", f"{R:.0f} Ω")
 
-col1, col2, col3 = st.columns(3)
-col1.metric("**Natężenie I**", f"{I:.3f} A")  # tylko napis pogrubiony
-col2.metric("Napięcie U", f"{U:.1f} V")
-col3.metric("Opór R", f"{R:.0f} Ω")
-
-# =========================
-# WZORY PRAWA OHMA
-# =========================
 st.markdown("""
 <h3>Prawo Ohma</h3>
-<p style="white-space: nowrap;">
-Natężenie prądu (I) jest wprost proporcjonalne do napięcia (U) oraz odwrotnie proporcjonalne do oporu (R).
-<br><b>Wzory:</b><br>
 I = U / R<br>
 U = I · R
-</p>
 """, unsafe_allow_html=True)

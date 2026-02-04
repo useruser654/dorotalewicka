@@ -177,15 +177,18 @@ def update_R():
 
 
 # === NAPIĘCIE U ===
-st.markdown("**⚡ Napięcie U [V]**")
+st.markdown(
+    "<div style='margin-bottom:-12px; font-weight:700;'>⚡ Napięcie U [V]</div>",
+    unsafe_allow_html=True
+)
 
-st.markdown("<div style='margin-top:-10px; margin-bottom:-6px;'>", unsafe_allow_html=True)
 st.text_input(
     "",
     value=f"{st.session_state.U:.2f}",
     key="U_text",
     on_change=update_U
 )
+
 st.markdown("</div>", unsafe_allow_html=True)
 
 st.markdown(

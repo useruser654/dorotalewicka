@@ -39,7 +39,7 @@ for i in range(dot_count):
     """
 
 # =========================
-# SVG – OBWÓD (jeszcze +~3%)
+# SVG – OBWÓD
 # =========================
 html_code = f"""
 <!DOCTYPE html>
@@ -114,24 +114,16 @@ path, line {{
 components.html(html_code, height=380)
 
 # =========================
-# SUWAKI – NA DOLE
+# SUWAKI – PANEL STEROWANIA
 # =========================
-
-st.markdown("""
-<style>
-/* Pogrubienie etykiet suwaków – wersja odporna */
-div[data-testid="stSlider"] label {
-    font-weight: 700 !important;
-    font-size: 1.05rem;
-}
-</style>
-""", unsafe_allow_html=True)
-
 st.divider()
-st.subheader("🎛 Regulacja parametrów")
+st.subheader("🎛 Panel sterowania")
 
-U = st.slider("Napięcie U [V]", 0.0, 300.0, U, step=1.0, key="U")
-R = st.slider("Opór R [Ω]", 1.0, 500.0, R, step=1.0, key="R")
+st.markdown("### ⚡ Napięcie U [V]")
+U = st.slider("", 0.0, 300.0, U, step=1.0, key="U")
+
+st.markdown("### Ω Opór R [Ω]")
+R = st.slider("", 1.0, 500.0, R, step=1.0, key="R")
 
 # =========================
 # WYNIKI
@@ -144,9 +136,16 @@ col1.metric("Napięcie U", f"{U:.1f} V")
 col2.metric("Opór R", f"{R:.0f} Ω")
 col3.metric("Natężenie I", f"{I:.3f} A")
 
-st.markdown(r"""
+st.markdown("""
 ### Prawo Ohma
-Natężenie prądu (I) płynącego przez przewodnik jest wprost proporcjonalne do napięcia przyłożonego do jego końców oraz odwrotnie proporcjonalne do jego oporu. Wzór: I = U / R   lub   U = I x R
+Natężenie prądu (I) płynącego przez przewodnik jest wprost proporcjonalne  
+do napięcia przyłożonego do jego końców oraz odwrotnie proporcjonalne  
+do jego oporu.
+
+**Wzory:**  
+I = U / R  
+U = I · R
 """)
+
 
 

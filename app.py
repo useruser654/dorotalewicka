@@ -161,10 +161,17 @@ U = st.slider("", 0.0, 300.0, U, step=1.0, key="U")
 
 st.markdown("<div style='height:16px'></div>", unsafe_allow_html=True)
 
-# Opór R - suwak podniesiony bliżej wartości
+# Opór R - podniesiony suwak bliżej wartości
 st.markdown("**Opór R [Ω]**")
 st.markdown(f"<div style='color:red; font-weight:700; margin-top:-6px;'>{R:.0f} Ω</div>", unsafe_allow_html=True)
-R = st.slider("", 1.0, 500.0, R, step=1.0, key="R", format="%d")
+st.markdown("""
+<style>
+div[data-testid="stSlider"][id*="R"] {
+    margin-top: -30px;  /* przesunięcie suwaczka wyżej */
+}
+</style>
+""", unsafe_allow_html=True)
+R = st.slider("", 1.0, 500.0, R, step=1.0, key="R")
 
 # =========================
 # WYNIKI – wyśrodkowany nagłówek i pogrubiony tylko napis "Natężenie I"

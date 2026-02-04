@@ -14,10 +14,9 @@ st.markdown("""
 span[data-testid="stSliderValue"] {
     display: none;
 }
-/* pogrubienie metric Natężenie I */
+/* pogrubienie napisu i wartości Natężenie I, ale bez zmiany wielkości */
 .bold-metric {
     font-weight: 700;
-    font-size: 1.2rem;
 }
 </style>
 """, unsafe_allow_html=True)
@@ -114,7 +113,7 @@ path, line {{
     <text x="540" y="185" class="symbol">R</text>
     <text x="512" y="240" class="label">{R:.0f} Ω</text>
 
-    <!-- AMPEROMIERZ z animacją pulsowania -->
+    <!-- AMPEROMIERZ z płynnym pulsowaniem -->
     <circle id="ampermeter" cx="340" cy="60" r="20" fill="white" stroke="black"/>
     <text x="332" y="66" class="symbol">A</text>
     <text x="300" y="96" class="label">{I:.3f} A</text>
@@ -123,18 +122,19 @@ path, line {{
 
 </svg>
 <script>
-    const pulse = () => {{
+    const pulseAmper = () => {{
         const amp = document.getElementById("ampermeter");
         amp.animate([
             {{ r: "20" }},
             {{ r: "25" }},
             {{ r: "20" }}
         ], {{
-            duration: 300,
-            iterations: 1
+            duration: 2000,  // pulsowanie 2 sekundy
+            iterations: Infinity,
+            easing: "ease-in-out"
         }});
     }};
-    window.addEventListener("load", pulse);
+    window.addEventListener("load", pulseAmper);
 </script>
 </body>
 </html>
@@ -148,13 +148,13 @@ components.html(html_code, height=360)
 st.markdown("<h3 style='text-align:center; margin-top:6px;'>🎛️ Panel sterowania 🎛️</h3>", unsafe_allow_html=True)
 
 st.markdown("**⚡ Napięcie U [V]**")
-st.markdown(f"<div style='color:red; font-weight:700; font-size:1.15rem; margin-top:-6px;'>{U:.1f} V</div>", unsafe_allow_html=True)
+st.markdown(f"<div style='color:red; font-weight:700; margin-top:-6px;'>{U:.1f} V</div>", unsafe_allow_html=True)
 U = st.slider("", 0.0, 300.0, U, step=1.0, key="U")
 
 st.markdown("<div style='height:16px'></div>", unsafe_allow_html=True)
 
 st.markdown("**Opór R [Ω]**")
-st.markdown(f"<div style='color:red; font-weight:700; font-size:1.15rem; margin-top:-6px;'>{R:.0f} Ω</div>", unsafe_allow_html=True)
+st.markdown(f"<div style='color:red; font-weight:700; margin-top:-6px;'>{R:.0f} Ω</div>", unsafe_allow_html=True)
 R = st.slider("", 1.0, 500.0, R, step=1.0, key="R")
 
 # =========================
@@ -163,6 +163,7 @@ R = st.slider("", 1.0, 500.0, R, step=1.0, key="R")
 st.subheader("📊 Wartości w obwodzie")
 
 col1, col2, col3 = st.columns(3)
+# pogrubienie natężenia, wielkość taka sama jak innych metryk
 col1.markdown(f"<div class='bold-metric'>Natężenie I<br>{I:.3f} A</div>", unsafe_allow_html=True)
 col2.metric("Napięcie U", f"{U:.1f} V")
 col3.metric("Opór R", f"{R:.0f} Ω")

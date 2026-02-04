@@ -73,20 +73,17 @@ path, line {{
 <body>
 <svg viewBox="48 26 544 291">
 
-    <!-- GŁÓWNY OBWÓD -->
     <path id="circuit" d="M140 60 H540 V300 H140 Z"/>
 
-    <!-- ŹRÓDŁO NAPIĘCIA -->
+    <!-- ŹRÓDŁO -->
     <line x1="140" y1="160" x2="140" y2="200" stroke="black"/>
     <line x1="120" y1="165" x2="160" y2="165" stroke="black" stroke-width="4.5"/>
     <line x1="130" y1="195" x2="150" y2="195" stroke="black" stroke-width="4.5"/>
     <text x="90" y="155" class="label">Źródło</text>
 
-    <!-- ODBICIE DO WOLTOMIERZA -->
+    <!-- WOLTOMIERZ -->
     <line x1="140" y1="120" x2="220" y2="120"/>
     <line x1="140" y1="240" x2="220" y2="240"/>
-
-    <!-- WOLTOMIERZ -->
     <circle cx="220" cy="180" r="20" fill="white" stroke="black"/>
     <text x="212" y="186" class="symbol">V</text>
     <text x="190" y="214" class="label">{U:.1f} V</text>
@@ -103,7 +100,6 @@ path, line {{
     <text x="332" y="66" class="symbol">A</text>
     <text x="300" y="96" class="label">{I:.3f} A</text>
 
-    <!-- KROPKI PRĄDU -->
     {dots_html}
 
 </svg>
@@ -114,15 +110,24 @@ path, line {{
 components.html(html_code, height=380)
 
 # =========================
-# SUWAKI – PANEL STEROWANIA
+# PANEL STEROWANIA (bliżej animacji)
 # =========================
-st.divider()
+
+st.markdown("""
+<style>
+/* Podniesienie panelu sterowania */
+section[data-testid="stVerticalBlock"] {
+    margin-top: -20px;
+}
+</style>
+""", unsafe_allow_html=True)
+
 st.subheader("🎛 Panel sterowania")
 
-st.markdown("### ⚡ Napięcie U [V]")
+st.markdown("**⚡ Napięcie U [V]**")
 U = st.slider("", 0.0, 300.0, U, step=1.0, key="U")
 
-st.markdown("### Ω Opór R [Ω]")
+st.markdown("**Ω Opór R [Ω]**")
 R = st.slider("", 1.0, 500.0, R, step=1.0, key="R")
 
 # =========================
@@ -146,6 +151,7 @@ do jego oporu.
 I = U / R  
 U = I · R
 """)
+
 
 
 

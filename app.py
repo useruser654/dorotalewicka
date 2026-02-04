@@ -10,7 +10,7 @@ st.markdown("""
 <style>
 .block-container { padding-top: 1.4rem !important; }
 span[data-testid="stSliderValue"] { display: none; }
-.bold-metric { font-weight: 700; font-size: 1rem; }
+.bold-metric { font-weight: 700; }
 </style>
 """, unsafe_allow_html=True)
 
@@ -55,12 +55,14 @@ for i in range(dot_count):
     """
 
 # =========================
-# PULSOWANIE AMPEROMIERZA (tylko przy zmianie U lub R)
+# PULSOWANIE AMPEROMIERZA I "TĘTNO PRĄDU"
 # =========================
 pulse_js = ""
 if U != st.session_state.prev_U or R != st.session_state.prev_R:
     pulse_js = """
     const amp = document.getElementById("ampermeter");
+    const fill = document.getElementById("amp-fill");
+    // pulsowanie kółka
     amp.animate([
         { r: "20" },
         { r: "23" },
@@ -72,12 +74,24 @@ if U != st.session_state.prev_U or R != st.session_state.prev_R:
         iterations: 1,
         easing: "ease-in-out"
     });
+    // tętno wypełnienia
+    fill.animate([
+        { opacity: 0 },
+        { opacity: 0.4 },
+        { opacity: 0 },
+        { opacity: 0.4 },
+        { opacity: 0 }
+    ], {
+        duration: 2000,
+        iterations: 1,
+        easing: "ease-in-out"
+    });
     """
 st.session_state.prev_U = U
 st.session_state.prev_R = R
 
 # =========================
-# SVG – OBWÓD
+# SVG – OBWÓD Z AMPEROMIERZEM I TĘTNEM
 # =========================
 html_code = f"""
 <!DOCTYPE html>
@@ -118,6 +132,7 @@ path, line {{ stroke: green; stroke-width: 4.5; fill: none; }}
 
     <!-- Amperomierz -->
     <circle id="ampermeter" cx="340" cy="60" r="20" fill="white" stroke="black"/>
+    <circle id="amp-fill" cx="340" cy="60" r="15" fill="red" opacity="0"/>
     <text x="332" y="66" class="symbol">A</text>
     <text x="300" y="96" class="label">{I:.3f} A</text>
 
@@ -154,12 +169,12 @@ st.markdown(f"<div style='color:red; font-weight:700; margin-top:-6px;'>{R:.0f} 
 R = st.slider("", 1.0, 500.0, R, step=1.0, key="R")
 
 # =========================
-# WYNIKI – pogrubione, czcionka jak pozostałe metryki
+# WYNIKI – Natężenie I jak metryki Streamlit
 # =========================
 st.subheader("📊 Wartości w obwodzie")
 
 col1, col2, col3 = st.columns(3)
-col1.markdown(f"<div style='font-weight:700; font-size:16px;'>Natężenie I<br>{I:.3f} A</div>", unsafe_allow_html=True)
+col1.metric("Natężenie I", f"{I:.3f} A")  # ta sama czcionka co Napięcie U i Opór R
 col2.metric("Napięcie U", f"{U:.1f} V")
 col3.metric("Opór R", f"{R:.0f} Ω")
 

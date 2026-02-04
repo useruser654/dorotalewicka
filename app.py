@@ -62,7 +62,6 @@ if U != st.session_state.prev_U or R != st.session_state.prev_R:
     pulse_js = """
     const amp = document.getElementById("ampermeter");
     const fill = document.getElementById("amp-fill");
-    // pulsowanie kółka i wypełnienia - łagodnie, kilka cykli w 2s
     amp.animate([
         { r: "20" },
         { r: "22" },
@@ -162,18 +161,18 @@ U = st.slider("", 0.0, 300.0, U, step=1.0, key="U")
 
 st.markdown("<div style='height:16px'></div>", unsafe_allow_html=True)
 
-# Opór R
+# Opór R - suwak podniesiony bliżej wartości
 st.markdown("**Opór R [Ω]**")
 st.markdown(f"<div style='color:red; font-weight:700; margin-top:-6px;'>{R:.0f} Ω</div>", unsafe_allow_html=True)
-R = st.slider("", 1.0, 500.0, R, step=1.0, key="R")
+R = st.slider("", 1.0, 500.0, R, step=1.0, key="R", format="%d")
 
 # =========================
-# WYNIKI – Natężenie I jak metryki Streamlit
+# WYNIKI – wyśrodkowany nagłówek i pogrubiony tylko napis "Natężenie I"
 # =========================
 st.markdown("<h3 style='text-align:center; margin-top:10px;'>📊 Wartości w obwodzie</h3>", unsafe_allow_html=True)
 
 col1, col2, col3 = st.columns(3)
-col1.metric("Natężenie I", f"{I:.3f} A")  # taka sama czcionka co Napięcie U i Opór R
+col1.metric("**Natężenie I**", f"{I:.3f} A")  # tylko napis pogrubiony
 col2.metric("Napięcie U", f"{U:.1f} V")
 col3.metric("Opór R", f"{R:.0f} Ω")
 
@@ -189,3 +188,4 @@ oraz odwrotnie proporcjonalne do oporu (R).
 I = U / R  
 U = I · R
 """)
+

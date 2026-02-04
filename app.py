@@ -3,8 +3,19 @@ import streamlit.components.v1 as components
 
 st.set_page_config(page_title="Prawo Ohma – symulacja", layout="centered")
 
-st.title("⚡ Prawo Ohma – symulacja")
-st.markdown("**Interaktywna symulacja przepływu prądu w zamkniętym obwodzie DC**")
+# =========================
+# TYTUŁY – WYŚRODKOWANE
+# =========================
+st.markdown(
+    "<h1 style='text-align:center'>⚡ Prawo Ohma – symulacja</h1>",
+    unsafe_allow_html=True
+)
+st.markdown(
+    "<p style='text-align:center; font-weight:600'>"
+    "Interaktywna symulacja przepływu prądu w zamkniętym obwodzie DC"
+    "</p>",
+    unsafe_allow_html=True
+)
 
 # =========================
 # PARAMETRY
@@ -82,12 +93,18 @@ path, line {{
     <line x1="130" y1="195" x2="150" y2="195" stroke="black" stroke-width="4.5"/>
     <text x="90" y="155" class="label">Źródło</text>
 
-    <!-- WOLTOMIERZ -->
+    <!-- ODBICIE DO WOLTOMIERZA -->
     <line x1="140" y1="120" x2="220" y2="120"/>
     <line x1="140" y1="240" x2="220" y2="240"/>
+
+    <!-- WOLTOMIERZ -->
     <circle cx="220" cy="180" r="20" fill="white" stroke="black"/>
     <text x="212" y="186" class="symbol">V</text>
     <text x="190" y="214" class="label">{U:.1f} V</text>
+
+    <!-- PRZEWÓD PRZEZ WOLTOMIERZ (NAPRAWIONY) -->
+    <line x1="220" y1="120" x2="220" y2="160"/>
+    <line x1="220" y1="200" x2="220" y2="240"/>
 
     <!-- REZYSTOR -->
     <rect x="520" y="145" width="45" height="75" fill="lightgray" stroke="black"/>
@@ -110,7 +127,7 @@ path, line {{
 components.html(html_code, height=380)
 
 # =========================
-# CSS – ukrycie domyślnej wartości suwaka
+# UKRYCIE DOMYŚLNEJ WARTOŚCI SUWAKA
 # =========================
 st.markdown("""
 <style>
@@ -121,9 +138,9 @@ span[data-testid="stSliderValue"] {
 """, unsafe_allow_html=True)
 
 # =========================
-# PANEL STEROWANIA
+# PANEL STEROWANIA – WYŚRODKOWANY
 # =========================
-st.subheader("🎛 Panel sterowania")
+st.markdown("<h3 style='text-align:center'>🎛 Panel sterowania</h3>", unsafe_allow_html=True)
 
 # --- NAPIĘCIE ---
 st.markdown("**⚡ Napięcie U [V]**")
@@ -134,7 +151,6 @@ st.markdown(
 )
 U = st.slider("", 0.0, 300.0, U, step=1.0, key="U")
 
-# odstęp między suwakami
 st.markdown("<div style='height:18px'></div>", unsafe_allow_html=True)
 
 # --- OPÓR ---
@@ -167,6 +183,3 @@ do jego oporu.
 I = U / R  
 U = I · R
 """)
-
-
-

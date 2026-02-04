@@ -183,8 +183,7 @@ st.markdown("""
 <h3>Prawo Ohma</h3>
 <p style="white-space: nowrap;">
 Natężenie prądu (I) jest wprost proporcjonalne do napięcia (U) oraz odwrotnie proporcjonalne do oporu (R).
-</p>
-<p><b>Wzory:</b><br>
+<br><b>Wzory:</b><br>
 I = U / R<br>
 U = I · R
 </p>

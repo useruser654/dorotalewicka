@@ -154,17 +154,53 @@ components.html(html_code, height=360)
 # =========================
 st.markdown("<h3 style='text-align:center; margin-top:6px;'>🎛️ Panel sterowania 🎛️</h3>", unsafe_allow_html=True)
 
-# Napięcie U
+# === NAPIĘCIE U ===
 st.markdown("**⚡ Napięcie U [V]**")
-st.markdown(f"<div style='color:red; font-weight:700; margin-top:-6px;'>{U:.1f} V</div>", unsafe_allow_html=True)
-U = st.slider("", 0.0, 600.0, U, step=1.0, key="U")
 
-st.markdown("<div style='height:16px'></div>", unsafe_allow_html=True)
+U = st.number_input(
+    "Wartość napięcia [V]",
+    min_value=0.0,
+    max_value=600.0,
+    value=float(U),
+    step=0.01,
+    format="%.2f",
+    key="U_input",
+    label_visibility="collapsed"
+)
 
-# Opór R - suwaki podniesione bliżej wartości
+U = st.slider(
+    "",
+    0.0,
+    600.0,
+    float(U),
+    step=0.01,
+    key="U"
+)
+
+st.markdown("<div style='height:14px'></div>", unsafe_allow_html=True)
+
+# === OPÓR R ===
 st.markdown("**Opór R [Ω]**")
-st.markdown(f"<div style='color:red; font-weight:700; margin-top:-17px; margin-bottom:-16px;'>{R:.0f} Ω</div>", unsafe_allow_html=True)
-R = st.slider("", 1.0, 500.0, R, step=1.0, key="R")
+
+R = st.number_input(
+    "Wartość oporu [Ω]",
+    min_value=1.0,
+    max_value=500.0,
+    value=float(R),
+    step=0.01,
+    format="%.2f",
+    key="R_input",
+    label_visibility="collapsed"
+)
+
+R = st.slider(
+    "",
+    1.0,
+    500.0,
+    float(R),
+    step=0.01,
+    key="R"
+)
 
 # =========================
 # WYNIKI – wyśrodkowany nagłówek i pogrubiony tylko napis "Natężenie I"

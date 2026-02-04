@@ -8,19 +8,23 @@ st.set_page_config(page_title="Prawo Ohma – symulacja", layout="centered")
 # =========================
 st.markdown("""
 <style>
-/* realne podniesienie CAŁOŚCI strony */
+/* lekkie OBNIŻENIE całej strony (żeby nie ucinało nagłówka) */
 .block-container {
-    padding-top: 0.5rem !important;
-}
-
-/* podniesienie sekcji wyników */
-.section-results {
-    margin-top: -18px;
+    padding-top: 1.4rem !important;
 }
 
 /* ukrycie domyślnej wartości suwaka */
 span[data-testid="stSliderValue"] {
     display: none;
+}
+
+/* pogrubienie pierwszego metrica (Natężenie I) */
+div[data-testid="metric-container"]:first-child label {
+    font-weight: 700;
+}
+div[data-testid="metric-container"]:first-child div {
+    font-weight: 700;
+    font-size: 1.1rem;
 }
 </style>
 """, unsafe_allow_html=True)
@@ -29,12 +33,22 @@ span[data-testid="stSliderValue"] {
 # TYTUŁY – WYŚRODKOWANE
 # =========================
 st.markdown(
-    "<h1 style='text-align:center; margin-bottom:6px;'>⚡ Prawo Ohma ⚡</h1>",
+    "<h1 style='text-align:center; margin-bottom:4px;'>⚡ Prawo Ohma ⚡</h1>",
     unsafe_allow_html=True
 )
 st.markdown(
     "<p style='text-align:center; font-weight:600; margin-top:0;'>"
     "Interaktywna symulacja przepływu prądu stałego w zamkniętym obwodzie DC"
+    "</p>",
+    unsafe_allow_html=True
+)
+
+# ===== LEGENDA =====
+st.markdown(
+    "<p style='text-align:center; font-size:0.95rem; margin-top:-6px;'>"
+    "<b>A</b> – amperomierz &nbsp;&nbsp;|&nbsp;&nbsp; "
+    "<b>V</b> – woltomierz &nbsp;&nbsp;|&nbsp;&nbsp; "
+    "<b>R</b> – rezystor"
     "</p>",
     unsafe_allow_html=True
 )
@@ -141,7 +155,7 @@ components.html(html_code, height=360)
 # =========================
 # PANEL STEROWANIA
 # =========================
-st.markdown("<h3 style='text-align:center; margin-top:8px;'>🎛️ Panel sterowania 🎛️</h3>", unsafe_allow_html=True)
+st.markdown("<h3 style='text-align:center; margin-top:6px;'>🎛️ Panel sterowania 🎛️</h3>", unsafe_allow_html=True)
 
 st.markdown("**⚡ Napięcie U [V]**")
 st.markdown(
@@ -162,11 +176,10 @@ st.markdown(
 R = st.slider("", 1.0, 500.0, R, step=1.0, key="R")
 
 # =========================
-# WYNIKI + PRAWO OHMA
+# WYNIKI
 # =========================
-st.markdown('<div class="section-results">', unsafe_allow_html=True)
-
 st.subheader("📊 Wartości w obwodzie")
+
 col1, col2, col3 = st.columns(3)
 col1.metric("Natężenie I", f"{I:.3f} A")
 col2.metric("Napięcie U", f"{U:.1f} V")
@@ -181,6 +194,4 @@ oraz odwrotnie proporcjonalne do oporu (R).
 I = U / R  
 U = I · R
 """)
-
-st.markdown("</div>", unsafe_allow_html=True)
 

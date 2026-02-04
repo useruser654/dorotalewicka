@@ -4,39 +4,37 @@ import streamlit.components.v1 as components
 st.set_page_config(page_title="Prawo Ohma – symulacja", layout="centered")
 
 # =========================
-# GLOBALNE KOREKTY UKŁADU
+# GLOBALNE STYLIZACJE
 # =========================
 st.markdown("""
 <style>
-.block-container {
-    padding-top: 1.4rem !important;
-}
-span[data-testid="stSliderValue"] {
-    display: none;
-}
-.bold-metric {
-    font-weight: 700;
-    font-size: 1rem; /* taka sama jak metryki Streamlit */
-}
+.block-container { padding-top: 1.4rem !important; }
+span[data-testid="stSliderValue"] { display: none; }
+.bold-metric { font-weight: 700; font-size: 1rem; }
 </style>
 """, unsafe_allow_html=True)
 
 # =========================
-# TYTUŁY – WYŚRODKOWANE
+# TYTUŁY I LEGENDA
 # =========================
 st.markdown("<h1 style='text-align:center; margin-bottom:4px;'>⚡ Prawo Ohma ⚡</h1>", unsafe_allow_html=True)
 st.markdown("<p style='text-align:center; font-weight:600; margin-top:0;'>Interaktywna symulacja przepływu prądu stałego w zamkniętym obwodzie DC</p>", unsafe_allow_html=True)
 st.markdown("<p style='text-align:center; font-size:0.95rem; margin-top:-6px;'><b>A</b> – amperomierz &nbsp;&nbsp;|&nbsp;&nbsp; <b>V</b> – woltomierz &nbsp;&nbsp;|&nbsp;&nbsp; <b>R</b> – rezystor</p>", unsafe_allow_html=True)
 
 # =========================
-# PARAMETRY DOMYŚLNE
+# DOMYŚLNE WARTOŚCI / SESSION_STATE
 # =========================
-U = st.session_state.get("U", 20.0)
-R = st.session_state.get("R", 150.0)
+if "U" not in st.session_state: st.session_state.U = 20.0
+if "R" not in st.session_state: st.session_state.R = 150.0
+if "prev_U" not in st.session_state: st.session_state.prev_U = st.session_state.U
+if "prev_R" not in st.session_state: st.session_state.prev_R = st.session_state.R
+
+U = st.session_state.U
+R = st.session_state.R
 I = U / R if R != 0 else 0
 
 # =========================
-# PARAMETRY ANIMACJI KROPEK
+# PARAMETRY DOTÓW PRĄDU
 # =========================
 if U == 0 or I == 0:
     dot_count = 0
@@ -57,13 +55,8 @@ for i in range(dot_count):
     """
 
 # =========================
-# SPRAWDZENIE, CZY ZMIANA -> PULSOWANIE AMPEROMIERZA
+# PULSOWANIE AMPEROMIERZA (tylko przy zmianie U lub R)
 # =========================
-if "prev_U" not in st.session_state:
-    st.session_state.prev_U = U
-if "prev_R" not in st.session_state:
-    st.session_state.prev_R = R
-
 pulse_js = ""
 if U != st.session_state.prev_U or R != st.session_state.prev_R:
     pulse_js = """
@@ -91,24 +84,10 @@ html_code = f"""
 <html>
 <head>
 <style>
-svg {{
-    width: 100%;
-    height: 360px;
-}}
-path, line {{
-    stroke: green;
-    stroke-width: 4.5;
-    fill: none;
-}}
-.label {{
-    font-size: 14px;
-    font-family: Arial;
-}}
-.symbol {{
-    font-size: 15px;
-    font-family: Arial;
-    font-weight: bold;
-}}
+svg {{ width: 100%; height: 360px; }}
+path, line {{ stroke: green; stroke-width: 4.5; fill: none; }}
+.label {{ font-size: 14px; font-family: Arial; }}
+.symbol {{ font-size: 15px; font-family: Arial; font-weight: bold; }}
 </style>
 </head>
 
@@ -162,16 +141,20 @@ components.html(html_code, height=360)
 # =========================
 st.markdown("<h3 style='text-align:center; margin-top:6px;'>🎛️ Panel sterowania 🎛️</h3>", unsafe_allow_html=True)
 
+# Napięcie U
 st.markdown("**⚡ Napięcie U [V]**")
 st.markdown(f"<div style='color:red; font-weight:700; margin-top:-6px;'>{U:.1f} V</div>", unsafe_allow_html=True)
+U = st.slider("", 0.0, 300.0, U, step=1.0, key="U")
 
 st.markdown("<div style='height:16px'></div>", unsafe_allow_html=True)
 
+# Opór R
 st.markdown("**Opór R [Ω]**")
 st.markdown(f"<div style='color:red; font-weight:700; margin-top:-6px;'>{R:.0f} Ω</div>", unsafe_allow_html=True)
+R = st.slider("", 1.0, 500.0, R, step=1.0, key="R")
 
 # =========================
-# WYNIKI – pogrubione, taka sama wielkość czcionki
+# WYNIKI – pogrubione, czcionka jak pozostałe metryki
 # =========================
 st.subheader("📊 Wartości w obwodzie")
 
@@ -180,6 +163,9 @@ col1.markdown(f"<div style='font-weight:700; font-size:16px;'>Natężenie I<br>{
 col2.metric("Napięcie U", f"{U:.1f} V")
 col3.metric("Opór R", f"{R:.0f} Ω")
 
+# =========================
+# WZORY PRAWA OHMA
+# =========================
 st.markdown("""
 ### Prawo Ohma
 Natężenie prądu (I) jest wprost proporcjonalne do napięcia (U)

@@ -49,7 +49,7 @@ st.markdown(
 # =========================
 # SESSION STATE
 # =========================
-if "U" not in st.session_state: st.session_state.U = 20.0
+if "U" not in st.session_state: st.session_state.U = 30.0
 if "R" not in st.session_state: st.session_state.R = 150.0
 if "U_text" not in st.session_state: st.session_state.U_text = f"{st.session_state.U:.2f}"
 if "R_text" not in st.session_state: st.session_state.R_text = f"{st.session_state.R:.2f}"

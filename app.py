@@ -152,7 +152,7 @@ st.markdown("<div style='font-weight:700'>⚡ Napięcie U [V]</div>", unsafe_all
 st.text_input("", f"{U:.2f}", key="U_text", on_change=update_U)
 st.markdown(
     "<div style='text-align:right; font-size:0.8rem; color:black;'>"
-    "wprowadź wartość do dwóch miejsc po przecinku i zatwierdź enterem</div>",
+    "przesuń suwak lub wprowadź wartość do dwóch miejsc po przecinku i zatwierdź enterem</div>",
     unsafe_allow_html=True
 )
 U = st.slider("", 0.0, 600.0, st.session_state.U, step=0.01, key="U")
@@ -160,11 +160,11 @@ U = st.slider("", 0.0, 600.0, st.session_state.U, step=0.01, key="U")
 st.markdown("<div style='height:8px'></div>", unsafe_allow_html=True)
 
 # --- OPÓR ---
-st.markdown("<div style='font-weight:700'>Opór R [Ω]</div>", unsafe_allow_html=True)
+st.markdown("<div style='font-weight:700'>🚧 Opór R [Ω]</div>", unsafe_allow_html=True)
 st.text_input("", f"{R:.2f}", key="R_text", on_change=update_R)
 st.markdown(
     "<div style='text-align:right; font-size:0.8rem; color:black;'>"
-    "wprowadź wartość do dwóch miejsc po przecinku i zatwierdź enterem</div>",
+    "przesuń suwak lub wprowadź wartość do dwóch miejsc po przecinku i zatwierdź enterem</div>",
     unsafe_allow_html=True
 )
 R = st.slider("", 1.0, 500.0, st.session_state.R, step=0.01, key="R")

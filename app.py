@@ -53,8 +53,6 @@ if "U" not in st.session_state: st.session_state.U = 20.0
 if "R" not in st.session_state: st.session_state.R = 150.0
 if "U_text" not in st.session_state: st.session_state.U_text = f"{st.session_state.U:.2f}"
 if "R_text" not in st.session_state: st.session_state.R_text = f"{st.session_state.R:.2f}"
-if "prev_U" not in st.session_state: st.session_state.prev_U = st.session_state.U
-if "prev_R" not in st.session_state: st.session_state.prev_R = st.session_state.R
 
 U = st.session_state.U
 R = st.session_state.R
@@ -108,24 +106,11 @@ for i in range(dot_count):
     """
 
 # =========================
-# PULS AMPEROMIERZA
-# =========================
-pulse_js = ""
-if U != st.session_state.prev_U or R != st.session_state.prev_R:
-    pulse_js = """
-    const amp = document.getElementById("ampermeter");
-    const fill = document.getElementById("amp-fill");
-    amp.animate([{r:"20"},{r:"22"},{r:"20"}], {duration:1200});
-    fill.animate([{opacity:0},{opacity:0.35},{opacity:0}], {duration:1200});
-    """
-st.session_state.prev_U = U
-st.session_state.prev_R = R
-
-# =========================
-# SVG – OBWÓD
+# SVG – OBWÓD Z CIĄGŁYM PULSEM AMPEROMIERZA
 # =========================
 html_code = f"""
 <svg viewBox="48 26 544 291" style="width:100%; height:360px">
+
 <path id="circuit" d="M140 60 H540 V300 H140 Z"
       stroke="green" stroke-width="4.5" fill="none"/>
 
@@ -147,12 +132,15 @@ html_code = f"""
 <text x="512" y="240">{R:.0f} Ω</text>
 
 <circle id="ampermeter" cx="340" cy="60" r="20" fill="white" stroke="black"/>
-<circle id="amp-fill" cx="340" cy="60" r="15" fill="red" opacity="0"/>
+<!-- PŁYNNY PULS czerwonego wypełnienia -->
+<circle id="amp-fill" cx="340" cy="60" r="15" fill="red" opacity="0">
+    <animate attributeName="opacity" values="0;0.35;0" dur="1.2s" repeatCount="indefinite" />
+</circle>
 <text x="332" y="66" font-weight="bold">A</text>
 <text x="300" y="96">{I:.3f} A</text>
 
 {dots_html}
-<script>{pulse_js}</script>
+
 </svg>
 """
 

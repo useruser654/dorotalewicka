@@ -188,7 +188,7 @@ st.slider("", 1.0, 500.0, key="R", step=0.01, on_change=update_R_from_slider)
 # =========================
 # WARTOŚCI
 # =========================
-st.markdown("<h3 style='text-align:center;'>📊 Wartości w obwodzie 📊</h3>", unsafe_allow_html=True)
+st.markdown("<h3 style='text-align:center; margin-top:18px;'>📊 Wartości w obwodzie 📊</h3>", unsafe_allow_html=True)
 c1, c2, c3 = st.columns(3)
 c1.metric("**Natężenie I**", f"{I:.3f} A")
 c2.metric("Napięcie U", f"{U:.1f} V")
@@ -199,7 +199,7 @@ c3.metric("Opór R", f"{R:.0f} Ω")
 # ========================= 
 st.markdown(""" 
 <h3>Prawo Ohma</h3> 
-<p style="white-space: nowrap;"> 
+<p style="white-space: nowrap; font-size:1.2rem;"> 
 Natężenie prądu (I) jest wprost proporcjonalne do napięcia (U) oraz odwrotnie proporcjonalne do oporu (R). 
 <br><b>Wzory:</b><br> 
 I = U / R<br> 

@@ -124,9 +124,10 @@ st.session_state.prev_U = U
 st.session_state.prev_R = R
 
 # =========================
-# SVG – OBWÓD Z DYNAMICZNYMI WARTOŚCIAMI
+# SVG – OBWÓD Z DYNAMICZNYMI WARTOŚCIAMI (z JS do płynnej aktualizacji)
 # =========================
 html_code = f"""
+<div id="svg-container">
 <svg viewBox="48 26 544 291" style="width:100%; height:360px">
 <path id="circuit" d="M140 60 H540 V300 H140 Z"
       stroke="green" stroke-width="4.5" fill="none"/>
@@ -154,12 +155,27 @@ html_code = f"""
 <text id="current_val" x="300" y="96">{I:.3f} A</text>
 
 {dots_html}
-<script>{pulse_js}</script>
+<script>
+function updateSVG(U, R) {{
+    const I = R != 0 ? (U / R).toFixed(3) : 0;
+    document.getElementById("voltage_val").textContent = U.toFixed(1) + " V";
+    document.getElementById("resistor_val").textContent = R.toFixed(0) + " Ω";
+    document.getElementById("current_val").textContent = I + " A";
+}}
+
+// Streamlit custom event listener
+window.addEventListener('message', (event) => {{
+    if(event.data.type === 'updateSVG'){{
+        updateSVG(event.data.U, event.data.R);
+    }}
+}});
+</script>
 </svg>
+</div>
 """
 
 # Renderowanie SVG z dynamicznymi wartościami
-components.html(html_code, height=360, scrolling=False)
+components.html(html_code, height=360, scrolling=False, key="svg_component")
 
 # =========================
 # PANEL STEROWANIA
@@ -174,9 +190,7 @@ st.markdown(
     "przesuń suwak lub wprowadź wartość [0-600] do dwóch miejsc po przecinku i zatwierdź enterem"
     "</div>", unsafe_allow_html=True
 )
-st.slider("", 0.0, 600.0, key="U", step=0.01, on_change=update_U_from_slider)
-
-st.markdown("<div style='height:10px'></div>", unsafe_allow_html=True)
+U = st.slider("", 0.0, 600.0, st.session_state.U, step=0.01, on_change=update_U_from_slider)
 
 # --- OPÓR ---
 st.markdown("<div style='font-weight:700'>🚧 Opór R [Ω]</div>", unsafe_allow_html=True)
@@ -186,7 +200,17 @@ st.markdown(
     "przesuń suwak lub wprowadź wartość [1-500] do dwóch miejsc po przecinku i zatwierdź enterem"
     "</div>", unsafe_allow_html=True
 )
-st.slider("", 1.0, 500.0, key="R", step=0.01, on_change=update_R_from_slider)
+R = st.slider("", 1.0, 500.0, st.session_state.R, step=0.01, on_change=update_R_from_slider)
+
+# =========================
+# Aktualizacja wartości w SVG w czasie rzeczywistym
+# =========================
+components.html(f"""
+<script>
+const iframe = window.parent.document.getElementById('svg_component').querySelector('iframe');
+iframe.contentWindow.postMessage({{'type':'updateSVG','U':{U},'R':{R}}}, '*');
+</script>
+""", height=0)
 
 # =========================
 # WARTOŚCI

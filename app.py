@@ -168,7 +168,7 @@ st.markdown("<div style='font-weight:700'>⚡ Napięcie U [V]</div>", unsafe_all
 st.text_input("", key="U_text", on_change=update_U_from_text)
 st.markdown(
     "<div style='text-align:right; font-size:0.8rem; color:black;'>"
-    "przesuń suwak lub wprowadź wartość do dwóch miejsc po przecinku i zatwierdź enterem"
+    "przesuń suwak lub wprowadź wartość [0-600] do dwóch miejsc po przecinku i zatwierdź enterem"
     "</div>", unsafe_allow_html=True
 )
 st.slider("", 0.0, 600.0, key="U", step=0.01, on_change=update_U_from_slider)
@@ -180,7 +180,7 @@ st.markdown("<div style='font-weight:700'>🚧 Opór R [Ω]</div>", unsafe_allow
 st.text_input("", key="R_text", on_change=update_R_from_text)
 st.markdown(
     "<div style='text-align:right; font-size:0.8rem; color:black;'>"
-    "przesuń suwak lub wprowadź wartość do dwóch miejsc po przecinku i zatwierdź enterem"
+    "przesuń suwak lub wprowadź wartość [1-500] do dwóch miejsc po przecinku i zatwierdź enterem"
     "</div>", unsafe_allow_html=True
 )
 st.slider("", 1.0, 500.0, key="R", step=0.01, on_change=update_R_from_slider)
@@ -188,7 +188,7 @@ st.slider("", 1.0, 500.0, key="R", step=0.01, on_change=update_R_from_slider)
 # =========================
 # WARTOŚCI
 # =========================
-st.markdown("<h3 style='text-align:center; margin-top:12px;'>📊 Wartości w obwodzie 📊</h3>", unsafe_allow_html=True)
+st.markdown("<h3 style='text-align:center; margin-top:1px;'>📊 Wartości w obwodzie 📊</h3>", unsafe_allow_html=True)
 c1, c2, c3 = st.columns(3)
 c1.metric("**Natężenie I**", f"{I:.3f} A")
 c2.metric("Napięcie U", f"{U:.1f} V")

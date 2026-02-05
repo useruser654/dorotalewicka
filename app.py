@@ -11,7 +11,12 @@ st.markdown("""
 .block-container { padding-top: 1.4rem !important; }
 span[data-testid="stSliderValue"] { display: none; }
 
-/* 🔧 ŚCIŚNIĘCIE: etykieta → pole tekstowe */
+/* 🔧 Tekst w polu tekstowym na czerwono i pogrubiony */
+div[data-testid="stTextInput"] input {
+    color: red;
+    font-weight: 700;
+}
+
 div[data-testid="stTextInput"] {
     margin-top: -12px;
     margin-bottom: -8px;
@@ -46,12 +51,41 @@ st.markdown(
 # =========================
 if "U" not in st.session_state: st.session_state.U = 20.0
 if "R" not in st.session_state: st.session_state.R = 150.0
+if "U_text" not in st.session_state: st.session_state.U_text = f"{st.session_state.U:.2f}"
+if "R_text" not in st.session_state: st.session_state.R_text = f"{st.session_state.R:.2f}"
 if "prev_U" not in st.session_state: st.session_state.prev_U = st.session_state.U
 if "prev_R" not in st.session_state: st.session_state.prev_R = st.session_state.R
 
 U = st.session_state.U
 R = st.session_state.R
 I = U / R if R != 0 else 0
+
+# =========================
+# FUNKCJE SYNCHRONIZACJI
+# =========================
+def update_U_from_text():
+    try:
+        v = round(float(st.session_state.U_text.replace(",", ".")), 2)
+        if 0 <= v <= 600:
+            st.session_state.U = v
+            st.session_state.U_text = f"{v:.2f}"
+    except:
+        pass
+
+def update_R_from_text():
+    try:
+        v = round(float(st.session_state.R_text.replace(",", ".")), 2)
+        if 1 <= v <= 500:
+            st.session_state.R = v
+            st.session_state.R_text = f"{v:.2f}"
+    except:
+        pass
+
+def update_U_from_slider():
+    st.session_state.U_text = f"{st.session_state.U:.2f}"
+
+def update_R_from_slider():
+    st.session_state.R_text = f"{st.session_state.R:.2f}"
 
 # =========================
 # KROPKI PRĄDU
@@ -129,45 +163,27 @@ components.html(html_code, height=360)
 # =========================
 st.markdown("<h3 style='text-align:center; margin-top:6px;'>🎛️ Panel sterowania 🎛️</h3>", unsafe_allow_html=True)
 
-def update_U():
-    try:
-        v = round(float(st.session_state.U_text.replace(",", ".")), 2)
-        if 0 <= v <= 600:
-            st.session_state.U = v
-            st.session_state.U_text = f"{v:.2f}"
-    except:
-        pass
-
-def update_R():
-    try:
-        v = round(float(st.session_state.R_text.replace(",", ".")), 2)
-        if 1 <= v <= 500:
-            st.session_state.R = v
-            st.session_state.R_text = f"{v:.2f}"
-    except:
-        pass
-
 # --- NAPIĘCIE ---
 st.markdown("<div style='font-weight:700'>⚡ Napięcie U [V]</div>", unsafe_allow_html=True)
-st.text_input("", f"{U:.2f}", key="U_text", on_change=update_U)
+st.text_input("", key="U_text", on_change=update_U_from_text)
 st.markdown(
     "<div style='text-align:right; font-size:0.8rem; color:black;'>"
-    "Przesuń suwak lub wprowadź wartość do dwóch miejsc po przecinku i zatwierdź enterem</div>",
-    unsafe_allow_html=True
+    "przesuń suwak lub wprowadź wartość do dwóch miejsc po przecinku i zatwierdź enterem"
+    "</div>", unsafe_allow_html=True
 )
-U = st.slider("", 0.0, 600.0, st.session_state.U, step=0.01, key="U")
+st.slider("", 0.0, 600.0, key="U", step=0.01, on_change=update_U_from_slider)
 
-st.markdown("<div style='height:8px'></div>", unsafe_allow_html=True)
+st.markdown("<div style='height:10px'></div>", unsafe_allow_html=True)
 
 # --- OPÓR ---
 st.markdown("<div style='font-weight:700'>🚧 Opór R [Ω]</div>", unsafe_allow_html=True)
-st.text_input("", f"{R:.2f}", key="R_text", on_change=update_R)
+st.text_input("", key="R_text", on_change=update_R_from_text)
 st.markdown(
     "<div style='text-align:right; font-size:0.8rem; color:black;'>"
-    "Przesuń suwak lub wprowadź wartość do dwóch miejsc po przecinku i zatwierdź enterem</div>",
-    unsafe_allow_html=True
+    "przesuń suwak lub wprowadź wartość do dwóch miejsc po przecinku i zatwierdź enterem"
+    "</div>", unsafe_allow_html=True
 )
-R = st.slider("", 1.0, 500.0, st.session_state.R, step=0.01, key="R")
+st.slider("", 1.0, 500.0, key="R", step=0.01, on_change=update_R_from_slider)
 
 # =========================
 # WARTOŚCI

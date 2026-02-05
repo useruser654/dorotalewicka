@@ -11,12 +11,13 @@ st.markdown("""
 .block-container { padding-top: 1.4rem !important; }
 span[data-testid="stSliderValue"] { display: none; }
 
-/* 🔧 usunięcie nadmiarowej przerwy pod text_input */
+/* 🔧 ŚCIŚNIĘCIE: etykieta → pole tekstowe */
 div[data-testid="stTextInput"] {
-    margin-bottom: -10px;
+    margin-top: -12px;
+    margin-bottom: -8px;
 }
 
-/* 🔧 podniesienie suwaków bliżej placeholdera */
+/* 🔧 suwak bliżej placeholdera */
 div[data-testid="stSlider"] {
     margin-top: -6px;
 }
@@ -26,14 +27,10 @@ div[data-testid="stSlider"] {
 # =========================
 # TYTUŁY I LEGENDA
 # =========================
-st.markdown(
-    "<h1 style='text-align:center; margin-bottom:4px;'>⚡ Prawo Ohma ⚡</h1>",
-    unsafe_allow_html=True
-)
+st.markdown("<h1 style='text-align:center; margin-bottom:4px;'>⚡ Prawo Ohma ⚡</h1>", unsafe_allow_html=True)
 st.markdown(
     "<p style='text-align:center; font-weight:600; margin-top:0;'>"
-    "Interaktywna symulacja przepływu prądu stałego w zamkniętym obwodzie DC"
-    "</p>",
+    "Interaktywna symulacja przepływu prądu stałego w zamkniętym obwodzie DC</p>",
     unsafe_allow_html=True
 )
 st.markdown(
@@ -121,7 +118,6 @@ html_code = f"""
 <text x="300" y="96">{I:.3f} A</text>
 
 {dots_html}
-
 <script>{pulse_js}</script>
 </svg>
 """
@@ -155,19 +151,19 @@ def update_R():
 st.markdown("<div style='font-weight:700'>⚡ Napięcie U [V]</div>", unsafe_allow_html=True)
 st.text_input("", f"{U:.2f}", key="U_text", on_change=update_U)
 st.markdown(
-    "<div style='text-align:right; font-size:0.8rem; color:#999;'>"
+    "<div style='text-align:right; font-size:0.8rem; color:black;'>"
     "wprowadź wartość do dwóch miejsc po przecinku i zatwierdź enterem</div>",
     unsafe_allow_html=True
 )
 U = st.slider("", 0.0, 600.0, st.session_state.U, step=0.01, key="U")
 
-st.markdown("<div style='height:10px'></div>", unsafe_allow_html=True)
+st.markdown("<div style='height:8px'></div>", unsafe_allow_html=True)
 
 # --- OPÓR ---
 st.markdown("<div style='font-weight:700'>Opór R [Ω]</div>", unsafe_allow_html=True)
 st.text_input("", f"{R:.2f}", key="R_text", on_change=update_R)
 st.markdown(
-    "<div style='text-align:right; font-size:0.8rem; color:#999;'>"
+    "<div style='text-align:right; font-size:0.8rem; color:black;'>"
     "wprowadź wartość do dwóch miejsc po przecinku i zatwierdź enterem</div>",
     unsafe_allow_html=True
 )
@@ -182,8 +178,15 @@ c1.metric("**Natężenie I**", f"{I:.3f} A")
 c2.metric("Napięcie U", f"{U:.1f} V")
 c3.metric("Opór R", f"{R:.0f} Ω")
 
-st.markdown("""
-<h3>Prawo Ohma</h3>
-I = U / R<br>
-U = I · R
+# ========================= 
+# PRAWO OHMA 
+# ========================= 
+st.markdown(""" 
+<h3>Prawo Ohma</h3> 
+<p style="white-space: nowrap;"> 
+Natężenie prądu (I) jest wprost proporcjonalne do napięcia (U) oraz odwrotnie proporcjonalne do oporu (R). 
+<br><b>Wzory:</b><br> 
+I = U / R<br> 
+U = I · R 
+</p> 
 """, unsafe_allow_html=True)

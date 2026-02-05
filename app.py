@@ -90,24 +90,22 @@ def update_R_from_slider():
 # =========================
 # KROPKI PRĄDU
 # =========================
-def generate_dots(I):
-    if I == 0:
-        return "", 1
+if U == 0 or I == 0:
+    dot_count, speed = 0, 1
+else:
     speed = min(I * 4, 12)
     dot_count = int(min(I * 25, 25))
-    dots_html = ""
-    for i in range(dot_count):
-        delay = i * (1 / dot_count)
-        dots_html += f"""
-        <circle r="5.5" fill="yellow">
-            <animateMotion dur="{10/speed:.2f}s" begin="{delay:.2f}s" repeatCount="indefinite">
-                <mpath href="#circuit"/>
-            </animateMotion>
-        </circle>
-        """
-    return dots_html, speed
 
-dots_html, _ = generate_dots(I)
+dots_html = ""
+for i in range(dot_count):
+    delay = i * (1 / dot_count)
+    dots_html += f"""
+    <circle r="5.5" fill="yellow">
+        <animateMotion dur="{10/speed:.2f}s" begin="{delay:.2f}s" repeatCount="indefinite">
+            <mpath href="#circuit"/>
+        </animateMotion>
+    </circle>
+    """
 
 # =========================
 # PULS AMPEROMIERZA
@@ -124,10 +122,9 @@ st.session_state.prev_U = U
 st.session_state.prev_R = R
 
 # =========================
-# SVG – OBWÓD Z DYNAMICZNYMI WARTOŚCIAMI (z JS do płynnej aktualizacji)
+# SVG – OBWÓD
 # =========================
 html_code = f"""
-<div id="svg-container">
 <svg viewBox="48 26 544 291" style="width:100%; height:360px">
 <path id="circuit" d="M140 60 H540 V300 H140 Z"
       stroke="green" stroke-width="4.5" fill="none"/>
@@ -141,41 +138,25 @@ html_code = f"""
 
 <circle cx="220" cy="180" r="20" fill="white" stroke="black"/>
 <text x="212" y="186" font-weight="bold">V</text>
-<text id="voltage_val" x="190" y="214">{U:.1f} V</text>
+<text x="190" y="214">{U:.1f} V</text>
 <line x1="220" y1="120" x2="220" y2="160" stroke="green" stroke-width="4.5"/>
 <line x1="220" y1="200" x2="220" y2="240" stroke="green" stroke-width="4.5"/>
 
 <rect x="520" y="145" width="45" height="75" fill="#ddd" stroke="black"/>
 <text x="540" y="185" font-weight="bold">R</text>
-<text id="resistor_val" x="512" y="240">{R:.0f} Ω</text>
+<text x="512" y="240">{R:.0f} Ω</text>
 
 <circle id="ampermeter" cx="340" cy="60" r="20" fill="white" stroke="black"/>
 <circle id="amp-fill" cx="340" cy="60" r="15" fill="red" opacity="0"/>
 <text x="332" y="66" font-weight="bold">A</text>
-<text id="current_val" x="300" y="96">{I:.3f} A</text>
+<text x="300" y="96">{I:.3f} A</text>
 
 {dots_html}
-<script>
-function updateSVG(U, R) {{
-    const I = R != 0 ? (U / R).toFixed(3) : 0;
-    document.getElementById("voltage_val").textContent = U.toFixed(1) + " V";
-    document.getElementById("resistor_val").textContent = R.toFixed(0) + " Ω";
-    document.getElementById("current_val").textContent = I + " A";
-}}
-
-// Streamlit custom event listener
-window.addEventListener('message', (event) => {{
-    if(event.data.type === 'updateSVG'){{
-        updateSVG(event.data.U, event.data.R);
-    }}
-}});
-</script>
+<script>{pulse_js}</script>
 </svg>
-</div>
 """
 
-# Renderowanie SVG z dynamicznymi wartościami
-components.html(html_code, height=360, scrolling=False, key="svg_component")
+components.html(html_code, height=360)
 
 # =========================
 # PANEL STEROWANIA
@@ -190,7 +171,9 @@ st.markdown(
     "przesuń suwak lub wprowadź wartość [0-600] do dwóch miejsc po przecinku i zatwierdź enterem"
     "</div>", unsafe_allow_html=True
 )
-U = st.slider("", 0.0, 600.0, st.session_state.U, step=0.01, on_change=update_U_from_slider)
+st.slider("", 0.0, 600.0, key="U", step=0.01, on_change=update_U_from_slider)
+
+st.markdown("<div style='height:10px'></div>", unsafe_allow_html=True)
 
 # --- OPÓR ---
 st.markdown("<div style='font-weight:700'>🚧 Opór R [Ω]</div>", unsafe_allow_html=True)
@@ -200,22 +183,12 @@ st.markdown(
     "przesuń suwak lub wprowadź wartość [1-500] do dwóch miejsc po przecinku i zatwierdź enterem"
     "</div>", unsafe_allow_html=True
 )
-R = st.slider("", 1.0, 500.0, st.session_state.R, step=0.01, on_change=update_R_from_slider)
-
-# =========================
-# Aktualizacja wartości w SVG w czasie rzeczywistym
-# =========================
-components.html(f"""
-<script>
-const iframe = window.parent.document.getElementById('svg_component').querySelector('iframe');
-iframe.contentWindow.postMessage({{'type':'updateSVG','U':{U},'R':{R}}}, '*');
-</script>
-""", height=0)
+st.slider("", 1.0, 500.0, key="R", step=0.01, on_change=update_R_from_slider)
 
 # =========================
 # WARTOŚCI
 # =========================
-st.markdown("<h3 style='text-align:center; margin-top:18px;'>📊 Wartości w obwodzie 📊</h3>", unsafe_allow_html=True)
+st.markdown("<h3 style='text-align:center; margin-top:6px;'>📊 Wartości w obwodzie 📊</h3>", unsafe_allow_html=True)
 c1, c2, c3 = st.columns(3)
 c1.metric("**Natężenie I**", f"{I:.3f} A")
 c2.metric("Napięcie U", f"{U:.1f} V")

@@ -149,7 +149,7 @@ html_code = f"""
 <circle id="ampermeter" cx="340" cy="60" r="20" fill="white" stroke="black"/>
 <circle id="amp-fill" cx="340" cy="60" r="15" fill="red" opacity="0"/>
 <text x="332" y="66" font-weight="bold">A</text>
-<text x="300" y="96">{I:.3f} A</text>
+<text x="300" y="96" font-weight="700">{I:.3f} A</text>
 
 {dots_html}
 <script>{pulse_js}</script>

@@ -106,10 +106,10 @@ for i in range(dot_count):
     """
 
 # =========================
-# SVG – OBWÓD Z CIĄGŁYM PULSEM AMPEROMIERZA
+# SVG – OBWÓD Z DYNAMICZNYMI WARTOŚCIAMI
 # =========================
 html_code = f"""
-<svg viewBox="48 26 544 291" style="width:100%; height:360px">
+<svg id="circuit-svg" viewBox="48 26 544 291" style="width:100%; height:360px">
 
 <path id="circuit" d="M140 60 H540 V300 H140 Z"
       stroke="green" stroke-width="4.5" fill="none"/>
@@ -123,25 +123,49 @@ html_code = f"""
 
 <circle cx="220" cy="180" r="20" fill="white" stroke="black"/>
 <text x="212" y="186" font-weight="bold">V</text>
-<text x="190" y="214">{U:.1f} V</text>
+<text id="volt-text" x="190" y="214">{U:.1f} V</text>
 <line x1="220" y1="120" x2="220" y2="160" stroke="green" stroke-width="4.5"/>
 <line x1="220" y1="200" x2="220" y2="240" stroke="green" stroke-width="4.5"/>
 
 <rect x="520" y="145" width="45" height="75" fill="#ddd" stroke="black"/>
 <text x="540" y="185" font-weight="bold">R</text>
-<text x="512" y="240">{R:.0f} Ω</text>
+<text id="resistor-text" x="512" y="240">{R:.0f} Ω</text>
 
 <circle id="ampermeter" cx="340" cy="60" r="20" fill="white" stroke="black"/>
-<!-- PŁYNNY PULS czerwonego wypełnienia -->
 <circle id="amp-fill" cx="340" cy="60" r="15" fill="red" opacity="0">
     <animate attributeName="opacity" values="0;0.35;0" dur="1.2s" repeatCount="indefinite" />
 </circle>
 <text x="332" y="66" font-weight="bold">A</text>
-<text x="300" y="96">{I:.3f} A</text>
+<text id="amp-text" x="300" y="96">{I:.3f} A</text>
 
 {dots_html}
 
 </svg>
+
+<script>
+// =========================
+// FUNKCJA DYNAMICZNEJ AKTUALIZACJI WARTOŚCI
+// =========================
+const sliderU = window.parent.document.querySelector('input[data-testid="stSlider"][aria-label=""]');
+const sliderR = window.parent.document.querySelectorAll('input[data-testid="stSlider"]')[1];
+
+const voltText = document.getElementById("volt-text");
+const resistorText = document.getElementById("resistor-text");
+const ampText = document.getElementById("amp-text");
+
+function updateSVGValues() {{
+    const U = parseFloat(sliderU.value);
+    const R = parseFloat(sliderR.value);
+    const I = R != 0 ? (U / R) : 0;
+    
+    voltText.textContent = U.toFixed(1) + " V";
+    resistorText.textContent = R.toFixed(0) + " Ω";
+    ampText.textContent = I.toFixed(3) + " A";
+}}
+
+// Aktualizacja co 50 ms
+setInterval(updateSVGValues, 50);
+</script>
 """
 
 components.html(html_code, height=360)

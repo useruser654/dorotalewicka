@@ -1,4 +1,4 @@
-import streamlit as st 
+import streamlit as st
 import streamlit.components.v1 as components
 
 st.set_page_config(page_title="Prawo Ohma – symulacja", layout="centered")
@@ -25,17 +25,6 @@ div[data-testid="stTextInput"] {
 /* 🔧 suwak bliżej placeholdera */
 div[data-testid="stSlider"] {
     margin-top: -6px;
-}
-
-/* 🔧 animacja pulsowania amperomierza */
-@keyframes pulse {
-    0% {opacity: 0;}
-    50% {opacity: 0.35;}
-    100% {opacity: 0;}
-}
-
-.pulse-fill {
-    animation: pulse 1s infinite;
 }
 </style>
 """, unsafe_allow_html=True)
@@ -119,10 +108,18 @@ for i in range(dot_count):
     """
 
 # =========================
-# PULS AMPEROMIERZA (dynamiczny)
+# PULS AMPEROMIERZA
 # =========================
-# Dodajemy klasę .pulse-fill do czerwonego wypełnienia, aby pulsował cały czas
-pulse_class = "pulse-fill"
+pulse_js = ""
+if U != st.session_state.prev_U or R != st.session_state.prev_R:
+    pulse_js = """
+    const amp = document.getElementById("ampermeter");
+    const fill = document.getElementById("amp-fill");
+    amp.animate([{r:"20"},{r:"22"},{r:"20"}], {duration:1200});
+    fill.animate([{opacity:0},{opacity:0.35},{opacity:0}], {duration:1200});
+    """
+st.session_state.prev_U = U
+st.session_state.prev_R = R
 
 # =========================
 # SVG – OBWÓD
@@ -150,11 +147,12 @@ html_code = f"""
 <text x="512" y="240">{R:.0f} Ω</text>
 
 <circle id="ampermeter" cx="340" cy="60" r="20" fill="white" stroke="black"/>
-<circle id="amp-fill" class="{pulse_class}" cx="340" cy="60" r="15" fill="red" opacity="0"/>
+<circle id="amp-fill" cx="340" cy="60" r="15" fill="red" opacity="0"/>
 <text x="332" y="66" font-weight="bold">A</text>
 <text x="300" y="96">{I:.3f} A</text>
 
 {dots_html}
+<script>{pulse_js}</script>
 </svg>
 """
 
